@@ -2,19 +2,21 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useParams } from "react-router-dom";
 
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import ProductList from "./components/ProductList";
-import ProductDetail from "./components/ProductDetail";
-import Cart from "./components/Cart";
-import SellerOrders from "./components/SellerOrders";
-import OrderHistory from "./components/OrderHistory";
-import Checkout from "./components/Checkout";
-import Home from "./components/Home";
-import ManageProducts from "./components/manage/ManageProducts";
-import ClaimList from "./components/manage/ClaimList";
+import Header from "./components/layout/Header";
+import Footer from "./components/layout/Footer";
+import Login from "./modules/auth/Login";
+import Register from "./modules/auth/Register";
+
+import ProductList from "./modules/product/ProductList";
+import ProductDetail from "./modules/product/ProductDetail";
+import Cart from "./modules/payment/Cart"; // nếu bạn có
+import SellerOrders from "./modules/order/SellerOrders";
+import OrderHistory from "./modules/order/OrderHistory";
+import Checkout from "./modules/order/Checkout";
+import Home from "./modules/product/Home";
+//import ManageProducts from "./modules/manage/ManageProducts"; // nếu có
+//import ClaimList from "./modules/claim/ClaimList";
+
 import "./App.css";
 
 function App() {
@@ -124,11 +126,12 @@ function App() {
           <Route path="/Product-Detail/:id" element={<ProductDetail onAdd={handleAdd} />} />
           <Route path="/order-history" element={<OrderHistory />} />
           <Route path="/seller-orders" element={<SellerOrders />} />
-          <Route path="/manage-products" element={<ManageProducts />} />
-          <Route path="/claim-list" element={<ClaimList />} />
+
           <Route path="/cart" element={<Cart cart={cart} onRemove={handleRemove}
             onChangeQuantity={handleChangeQuantity}
-            currentUser={currentUser}      // <<< truyền currentUser vào Cart
+            currentUser={currentUser}      // <<< truyền currentUser vào Cart 
+          // <Route path="/manage-products" element={<ManageProducts />} />
+          //  <Route path="/claim-list" element={<ClaimList />} />
           />
           }
           />

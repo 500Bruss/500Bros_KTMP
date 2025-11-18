@@ -189,6 +189,29 @@
   ],
   "orders": [
     {
+      "id": "7bce",
+      "userId": "1",
+      "customer": {
+        "name": "à fa",
+        "phone": "124",
+        "email": "ad@gmail.com",
+        "address": "45 Nguyễn Trãi, Quận 5, TP.HCM, Việt Nam"
+      },
+      "items": [
+        {
+          "id": "3",
+          "name": "Gà rán",
+          "img": "/Images/Garan.jpg",
+          "claim": 15000000,
+          "price": 15000000,
+          "quantity": 1
+        }
+      ],
+      "total": 15000000,
+      "status": "Đã xử lý",
+      "date": "2025-10-02"
+    },
+    {
       "id": "e856",
       "userId": "1976",
       "customer": {
@@ -203,7 +226,7 @@
           "name": "Bảo hiểm Oto",
           "img": "/Images/Hambur.jpg",
           "description": "Giúp đám bảo ô tô của bạn khỏi va chạm",
-          "claim": 150000000,
+          "claim": "Đền bù đến 15000000",
           "price": 25000000,
           "category": " Bảo hiểm Cá nhân",
           "quantity": 1
@@ -243,110 +266,35 @@
       ],
       "total": 22000000,
       "totalClaim": 200000000,
-      "status": "Đã xử lý",
+      "status": "Đang xử lý",
       "date": "2025-10-09"
-    },
+    }
+  ],
+  "claims": [
     {
-      "id": "bfd9",
-      "userId": "1976",
+      "id": "c974",
+      "orderId": "7bce",
+      "userId": "1",
       "customer": {
-        "name": "Trần  Văn Tấn ",
-        "phone": "0913512411",
-        "email": "ad@gmail.com",
-        "address": "45 Nguyễn Trãi, Quận 5, TP.HCM, Việt Nam"
-      },
-      "items": [
-        {
-          "id": "1",
-          "name": "Bảo hiểm Ô tô Toàn diện",
-          "img": "/Images/Logo.png",
-          "description": "Bảo vệ toàn diện cho xe ô tô trước rủi ro va chạm, cháy nổ và thiệt hại bất ngờ.",
-          "claim": 150000000,
-          "price": 25000000,
-          "category": "Bảo hiểm Cá nhân",
-          "bonus": [
-            {
-              "head": "Bảo vệ người ngồi trên xe",
-              "info": "Chi trả lên đến 40 triệu đồng/người trong trường hợp tai nạn.",
-              "infoPlus": "Công ty bảo hiểm hỗ trợ toàn bộ chi phí y tế hoặc tử vong do tai nạn trong khi tham gia giao thông."
-            }
-          ],
-          "quantity": 1
-        }
-      ],
-      "total": 25000000,
-      "totalClaim": 150000000,
-      "status": "Đã xử lý",
-      "date": "2025-10-09"
-    },
-    {
-      "id": "d6f7",
-      "userId": "1976",
-      "customer": {
-        "name": "Lâm Thành",
-        "phone": "515231511",
+        "name": "à fa",
+        "phone": "124",
         "email": "ad@gmail.com",
         "address": "45 Nguyễn Trãi, Quận 5, TP.HCM, Việt Nam"
       },
       "items": [
         {
           "id": "3",
-          "name": "Bảo hiểm Y tế Toàn quốc",
-          "img": "/Images/Logo.png",
-          "description": "Đảm bảo quyền lợi chăm sóc y tế cho bạn tại mọi bệnh viện trong nước.",
-          "claim": 200000000,
-          "price": 22000000,
-          "category": "Bảo hiểm Y tế",
-          "bonus": [
-            {
-              "head": "Chi phí điều trị nội trú",
-              "info": "Chi trả 90% chi phí điều trị nội trú và phẫu thuật.",
-              "infoPlus": "Không giới hạn số lần nằm viện, áp dụng tại hơn 300 bệnh viện trên toàn quốc."
-            }
-          ],
+          "name": "Gà rán",
+          "img": "/Images/Garan.jpg",
+          "claim": 15000000,
+          "price": 15000000,
           "quantity": 1
         }
       ],
-      "total": 22000000,
-      "totalClaim": 200000000,
-      "status": "Đã xử lý",
-      "date": "2025-10-09"
+      "total": 15000000,
+      "date": "2025-10-09T04:28:58.231Z",
+      "status": "Đã xử lý"
     },
-    {
-      "id": "5e14",
-      "userId": "1976",
-      "customer": {
-        "name": "fa ad",
-        "phone": "0905273523",
-        "email": "ad@gmail.com",
-        "address": "45 Nguyễn Trãi, Quận 5, TP.HCM, Việt Nam"
-      },
-      "items": [
-        {
-          "id": "2",
-          "name": "Bảo hiểm Tai nạn 24/7",
-          "img": "/Images/Logo.png",
-          "description": "Bảo vệ bạn suốt 24 giờ mỗi ngày trước các tai nạn trong công việc và cuộc sống.",
-          "claim": 120000000,
-          "price": 18000000,
-          "category": "Bảo hiểm Cá nhân",
-          "bonus": [
-            {
-              "head": "Chi trả thương tật hoặc tử vong do tai nạn",
-              "info": "Hỗ trợ 100% số tiền bảo hiểm nếu tử vong hoặc thương tật toàn bộ vĩnh viễn.",
-              "infoPlus": "Bao gồm tai nạn giao thông, lao động, thể thao và sinh hoạt hàng ngày."
-            }
-          ],
-          "quantity": 1
-        }
-      ],
-      "total": 18000000,
-      "totalClaim": 120000000,
-      "status": "Đang xử lý",
-      "date": "2025-10-10"
-    }
-  ],
-  "claims": [
     {
       "id": "b227",
       "orderId": "f8f4",
@@ -381,69 +329,27 @@
       "status": "Đang xử lý"
     },
     {
-      "id": "ce19",
-      "orderId": "d6f7",
-      "userId": "1976",
+      "id": "0a8b",
+      "orderId": "7bce",
+      "userId": "1",
       "customer": {
-        "name": "Lâm Thành",
-        "phone": "515231511",
+        "name": "à fa",
+        "phone": "124",
         "email": "ad@gmail.com",
         "address": "45 Nguyễn Trãi, Quận 5, TP.HCM, Việt Nam"
       },
       "items": [
         {
           "id": "3",
-          "name": "Bảo hiểm Y tế Toàn quốc",
-          "img": "/Images/Logo.png",
-          "description": "Đảm bảo quyền lợi chăm sóc y tế cho bạn tại mọi bệnh viện trong nước.",
-          "claim": 200000000,
-          "price": 22000000,
-          "category": "Bảo hiểm Y tế",
-          "bonus": [
-            {
-              "head": "Chi phí điều trị nội trú",
-              "info": "Chi trả 90% chi phí điều trị nội trú và phẫu thuật.",
-              "infoPlus": "Không giới hạn số lần nằm viện, áp dụng tại hơn 300 bệnh viện trên toàn quốc."
-            }
-          ],
+          "name": "Gà rán",
+          "img": "/Images/Garan.jpg",
+          "claim": 15000000,
+          "price": 15000000,
           "quantity": 1
         }
       ],
-      "total": 22000000,
-      "date": "2025-10-09T15:22:07.883Z",
-      "status": "Đang chờ xử lý"
-    },
-    {
-      "id": "761f",
-      "orderId": "5e14",
-      "userId": "1976",
-      "customer": {
-        "name": "fa ad",
-        "phone": "0905273523",
-        "email": "ad@gmail.com",
-        "address": "45 Nguyễn Trãi, Quận 5, TP.HCM, Việt Nam"
-      },
-      "items": [
-        {
-          "id": "2",
-          "name": "Bảo hiểm Tai nạn 24/7",
-          "img": "/Images/Logo.png",
-          "description": "Bảo vệ bạn suốt 24 giờ mỗi ngày trước các tai nạn trong công việc và cuộc sống.",
-          "claim": 120000000,
-          "price": 18000000,
-          "category": "Bảo hiểm Cá nhân",
-          "bonus": [
-            {
-              "head": "Chi trả thương tật hoặc tử vong do tai nạn",
-              "info": "Hỗ trợ 100% số tiền bảo hiểm nếu tử vong hoặc thương tật toàn bộ vĩnh viễn.",
-              "infoPlus": "Bao gồm tai nạn giao thông, lao động, thể thao và sinh hoạt hàng ngày."
-            }
-          ],
-          "quantity": 1
-        }
-      ],
-      "total": 18000000,
-      "date": "2025-10-10T03:33:12.854Z",
+      "total": 15000000,
+      "date": "2025-11-17T15:18:11.169Z",
       "status": "Đang chờ xử lý"
     }
   ]

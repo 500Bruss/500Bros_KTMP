@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Product from "./Product";
-import Banner from "./Banner";
+import Banner from "../../components/layout/Banner";
 import { useParams } from "react-router-dom";
 
 function ProductList({ onAdd }) {

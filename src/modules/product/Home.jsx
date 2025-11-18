@@ -1,64 +1,68 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./Home.css"; // 👉 nhớ import file CSS nhé
-import Banner from "./Banner";
+import "./Home.css";
+import Banner from "../../components/layout/Banner";
+
 export default function Home() {
     const navigate = useNavigate();
-    const bannerImages = ["/Images/nhantho1.jpg", "/Images/nhantho.jpg", "/Images/image.png"];
+
+    const bannerImages = [
+        "/Images/nhantho1.jpg",
+        "/Images/nhantho.jpg",
+        "/Images/image.png"
+    ];
+
     const categories = [
         {
             name: "Bảo hiểm Cá nhân",
             img: "/Images/Logo.png",
-            desc: "Giải pháp bảo vệ toàn diện cho bạn và gia đình.",
+            desc: "Giải pháp bảo vệ toàn diện cho bạn và gia đình."
         },
         {
             name: "Bảo hiểm Y tế",
             img: "/Images/Logo.png",
-            desc: "Đảm bảo chi phí khám chữa bệnh khi rủi ro xảy ra.",
+            desc: "Đảm bảo chi phí khám chữa bệnh khi rủi ro xảy ra."
         },
         {
             name: "Bảo hiểm Sức khỏe",
             img: "/Images/Logo.png",
-            desc: "Giúp bạn an tâm chăm sóc sức khỏe lâu dài.",
+            desc: "Giúp bạn an tâm chăm sóc sức khỏe dài lâu."
         },
         {
             name: "Bảo hiểm Công ty",
             img: "/Images/Logo.png",
-            desc: "Bảo vệ nhân viên và tài sản doanh nghiệp của bạn.",
-        },
-        {
-            name: "Bảo hiểm Du lịch",
-            img: "/Images/Logo.png",
-            desc: "Đảm bảo chuyến du lịch của bạn luôn vui vẻ và an tâm.",
+            desc: "Bảo vệ nhân viên và tài sản doanh nghiệp."
         },
     ];
 
     return (
         <div className="home-container">
-            {/* Banner giới thiệu */}
+
+            {/* Banner slider */}
             <Banner images={bannerImages} />
 
-            {/* Danh mục bảo hiểm */}
+            {/* Category section */}
             <section className="category-section">
-                <h2>Danh mục bảo hiểm phổ biến</h2>
+                <h2 className="section-title">Danh mục bảo hiểm phổ biến</h2>
 
                 <div className="category-grid">
                     {categories.map((category) => (
                         <div
                             key={category.name}
-                            className="category-card"
-                            onClick={() =>
-                                navigate(`/menu/${encodeURIComponent(category.name)}`)
-                            }
+                            className="category-card shadow-soft"
                         >
-                            <img src={category.img} alt={category.name} />
+                            <img src={category.img} alt={category.name} className="category-img" />
+
                             <div className="card-content">
                                 <h3>{category.name}</h3>
                                 <p>{category.desc}</p>
+
                                 <button
+                                    className="btn-detail"
                                     onClick={() =>
-                                        navigate(`/menu/${encodeURIComponent(category.name)}`)
-                                    }
+                                        navigate(
+                                            `/menu/${encodeURIComponent(category.name)}`
+                                        )}
                                 >
                                     Xem chi tiết
                                 </button>
@@ -68,13 +72,12 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Lý do chọn */}
+            {/* Why choose us */}
             <section className="why-choose">
                 <h2>Vì sao chọn Bảo Hiểm An Tâm?</h2>
                 <p>
-                    Chúng tôi hợp tác với nhiều công ty bảo hiểm hàng đầu, cung cấp các
-                    gói bảo hiểm minh bạch, dễ hiểu và đáng tin cậy. Hãy an tâm vì sự an
-                    toàn của bạn và người thân được đặt lên hàng đầu.
+                    Chúng tôi hợp tác cùng các công ty bảo hiểm uy tín, cung cấp sản phẩm minh bạch,
+                    rõ ràng và đáng tin cậy. Hãy lựa chọn An Tâm để bảo vệ bạn và gia đình theo cách tốt nhất.
                 </p>
             </section>
         </div>
