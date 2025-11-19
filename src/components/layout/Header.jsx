@@ -1,32 +1,63 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
+
 import "./Header.css";
+import { useAuth } from "../../modules/auth/context/AuthContext";
 
-export default function Header({ currentUser, setCurrentUser }) {
+import { categoryApi } from "../../api/category.api";
+import { productApi } from "../../api/product.api";
+
+export default function Header() {
     const navigate = useNavigate();
+    const { currentUser, logout } = useAuth();
+
+    const [categories, setCategories] = useState([]);
+    const [productsByCat, setProductsByCat] = useState({});
+    const [hoverCat, setHoverCat] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
-    const [showUserMenu, setShowUserMenu] = useState(false);
+    const [userHover, setUserHover] = useState(false);
 
-    const categories = [
-        { key: "Bảo hiểm Cá nhân", label: "Bảo hiểm Cá nhân" },
-        { key: "Bảo hiểm Y tế", label: "Bảo hiểm Y tế" },
-        { key: "Bảo hiểm Sức khỏe", label: "Bảo hiểm Sức khỏe" },
-        { key: "Bảo hiểm Công ty", label: "Bảo hiểm Công ty" },
-    ];
+    useEffect(() => {
+        loadCategories();
+    }, []);
 
-    const handleLogout = () => {
-        setCurrentUser(null);
-        localStorage.removeItem("currentUser");
-        navigate("/");
+    const loadCategories = async () => {
+        try {
+            const res = await categoryApi.getAll();
+            const list = res.data.data.items;
+            setCategories(list);
+
+            list.forEach(cat => loadProducts(cat.id));
+        } catch (err) {
+            console.error("Category load failed", err);
+        }
+    };
+
+    const loadProducts = async (categoryId) => {
+        try {
+            const res = await productApi.getByCategory(categoryId);
+            const list = res.data.data.items || [];
+
+            setProductsByCat(prev => ({
+                ...prev,
+                [categoryId]: list,
+            }));
+        } catch (err) {
+            console.error("Product load failed", err);
+        }
+    };
+
+    const navigateCategory = (id) => {
+        setTimeout(() => navigate(`/menu/${id}`), 120);
     };
 
     return (
         <header className="header-container">
+
             <div className="header-left">
                 <img
                     src="/Images/Logo.png"
-                    alt="Logo"
                     className="header-logo"
                     onClick={() => navigate("/")}
                 />
@@ -36,60 +67,76 @@ export default function Header({ currentUser, setCurrentUser }) {
                 <button onClick={() => navigate("/")}>Trang chủ</button>
 
                 <div
-                    className="menu-dropdown"
+                    className="ins-menu-group"
                     onMouseEnter={() => setShowDropdown(true)}
                     onMouseLeave={() => setShowDropdown(false)}
                 >
                     <button>Bảo hiểm ▾</button>
 
                     {showDropdown && (
-                        <div className="dropdown-box">
-                            {categories.map((c) => (
-                                <Link
-                                    key={c.key}
-                                    to={`/menu/${encodeURIComponent(c.key)}`}
-                                >
-                                    {c.label}
-                                </Link>
-                            ))}
+                        <div className="ins-mega-menu">
+                            <div className="ins-mega-left">
+                                {categories.map(cat => (
+                                    <div
+                                        key={cat.id}
+                                        className={`ins-mega-cat ${hoverCat === cat.id ? "active" : ""}`}
+                                        onMouseEnter={() => setHoverCat(cat.id)}
+                                        onClick={() => navigateCategory(cat.id)}
+                                    >
+                                        {cat.name}
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="ins-mega-right">
+                                {(productsByCat[hoverCat] || []).slice(0, 6).map(p => (
+                                    <div
+                                        key={p.id}
+                                        className="ins-mega-product"
+                                        onClick={() => navigate(`/Product-Detail/${p.id}`)}
+                                    >
+                                        <div className="ins-mega-info">
+                                            <h4>{p.name}</h4>
+                                            <p>{p.description?.slice(0, 50)}...</p>
+                                        </div>
+                                    </div>
+                                ))}
+
+                                {productsByCat[hoverCat]?.length === 0 && (
+                                    <div className="ins-mega-empty">Chưa có sản phẩm</div>
+                                )}
+                            </div>
                         </div>
                     )}
                 </div>
 
-                <button onClick={() => navigate("/")}>Tin tức</button>
-                <button onClick={() => navigate("/")}>Chi nhánh</button>
-                <button onClick={() => navigate("/")}>Về chúng tôi</button>
+                <button>Tin tức</button>
+                <button>Chi nhánh</button>
+                <button>Về chúng tôi</button>
 
                 {currentUser?.role === "admin" && (
                     <>
-                        <button onClick={() => navigate("/claim-list")}>
-                            Quản lý bồi thường
-                        </button>
-                        <button onClick={() => navigate("/seller-orders")}>
-                            Quản lý hợp đồng
-                        </button>
-                        <button onClick={() => navigate("/manage-products")}>
-                            Quản lí bảo hiểm
-                        </button>
+                        <button onClick={() => navigate("/claim-list")}>Quản lý bồi thường</button>
+                        <button onClick={() => navigate("/seller-orders")}>Quản lý hợp đồng</button>
+                        <button onClick={() => navigate("/manage-products")}>Quản lý bảo hiểm</button>
                     </>
                 )}
             </nav>
 
-            <div className="header-user">
+            <div
+                className="header-user"
+                onMouseEnter={() => setUserHover(true)}
+                onMouseLeave={() => setUserHover(false)}
+            >
                 {currentUser ? (
-                    <div
-                        className="user-box"
-                        onClick={() => setShowUserMenu(!showUserMenu)}
-                    >
+                    <div className="user-area">
                         <FaUserCircle size={24} />
-                        <span>{currentUser.username}</span>
+                        <span>{currentUser.fullname || currentUser.username}</span>
 
-                        {showUserMenu && (
-                            <div className="user-dropdown">
-                                <button onClick={() => navigate("/order-history")}>
-                                    Lịch sử bảo hiểm
-                                </button>
-                                <button onClick={handleLogout}>Đăng xuất</button>
+                        {userHover && (
+                            <div className="ins-user-dropdown">
+                                <button onClick={() => navigate("/order-history")}>Lịch sử bảo hiểm</button>
+                                <button onClick={logout}>Đăng xuất</button>
                             </div>
                         )}
                     </div>
@@ -99,6 +146,7 @@ export default function Header({ currentUser, setCurrentUser }) {
                     </Link>
                 )}
             </div>
+
         </header>
     );
 }
