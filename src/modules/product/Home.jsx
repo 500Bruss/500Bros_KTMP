@@ -66,6 +66,7 @@ export default function Home() {
                                 >
                                     Xem chi tiết
                                 </button>
+
                             </div>
                         </div>
                     ))}
