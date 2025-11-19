@@ -8,12 +8,10 @@ export default function Header({ currentUser, setCurrentUser }) {
     const [showDropdown, setShowDropdown] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
 
-    const categories = [
-        { key: "Bảo hiểm Cá nhân", label: "Bảo hiểm Cá nhân" },
-        { key: "Bảo hiểm Y tế", label: "Bảo hiểm Y tế" },
-        { key: "Bảo hiểm Sức khỏe", label: "Bảo hiểm Sức khỏe" },
-        { key: "Bảo hiểm Công ty", label: "Bảo hiểm Công ty" },
-    ];
+    useEffect(() => {
+        if (!currentUser) return;    // ← Chỉ load khi đã login
+        loadCategories();
+    }, [currentUser]);
 
     const handleLogout = () => {
         setCurrentUser(null);
@@ -43,15 +41,39 @@ export default function Header({ currentUser, setCurrentUser }) {
                     <button>Bảo hiểm ▾</button>
 
                     {showDropdown && (
-                        <div className="dropdown-box">
-                            {categories.map((c) => (
-                                <Link
-                                    key={c.key}
-                                    to={`/menu/${encodeURIComponent(c.key)}`}
-                                >
-                                    {c.label}
-                                </Link>
-                            ))}
+                        <div className="ins-mega-menu">
+                            <div className="ins-mega-left">
+                                {categories.map(cat => (
+                                    <div
+                                        key={cat.id}
+                                        className={`ins-mega-cat ${hoverCat === cat.id ? "active" : ""}`}
+                                        onMouseEnter={() => setHoverCat(cat.id)}
+                                        onClick={() => navigate(`/menu/${cat.id}`)}
+
+                                    >
+                                        {cat.name}
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="ins-mega-right">
+                                {(productsByCat[hoverCat] || []).slice(0, 6).map(p => (
+                                    <div
+                                        key={p.id}
+                                        className="ins-mega-product"
+                                        onClick={() => navigate(`/Product-Detail/${p.id}`)}
+                                    >
+                                        <div className="ins-mega-info">
+                                            <h4>{p.name}</h4>
+                                            <p>{p.description?.slice(0, 50)}...</p>
+                                        </div>
+                                    </div>
+                                ))}
+
+                                {productsByCat[hoverCat]?.length === 0 && (
+                                    <div className="ins-mega-empty">Chưa có sản phẩm</div>
+                                )}
+                            </div>
                         </div>
                     )}
                 </div>

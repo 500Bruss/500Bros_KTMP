@@ -121,7 +121,11 @@ function App() {
           <Route path="/productlist" element={<ProductList onAdd={handleAdd} searchTerm={searchTerm} />} />
           <Route path="/menu/:category" element={<MenuWrapper onAdd={handleAdd} />} />
           <Route path="/menu" element={<ProductList onAdd={handleAdd} />} />
-          <Route path="/login" element={<Login setCurrentUser={setCurrentUser} />} />
+          <Route path="/Product-Detail/:id" element={<ProductDetail onAdd={handleAdd} />} />
+          <Route path="/menu/:categoryId" element={<ProductList />} />
+
+          {/* 👤 AUTH */}
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/Product-Detail/:id" element={<ProductDetail onAdd={handleAdd} />} />
           <Route path="/order-history" element={<OrderHistory />} />
