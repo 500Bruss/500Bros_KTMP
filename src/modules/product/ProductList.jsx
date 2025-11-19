@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import api from "../../api/axiosClient";
 import { productApi } from "../../api/product.api";
 import "./ProductList.css";
 
@@ -85,7 +85,9 @@ export default function ProductList() {
             {/* Product List */}
             <main className="product-list">
                 <h2 className="list-title">
-                    Sản phẩm thuộc danh mục #{categoryId}
+                    {selectedCategory === "all"
+                        ? "Tất cả sản phẩm"
+                        : `Sản phẩm thuộc danh mục #${selectedCategory}`}
                 </h2>
 
                 <div className="product-grid">

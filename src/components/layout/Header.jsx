@@ -16,12 +16,27 @@ export default function Header() {
     const [productsByCat, setProductsByCat] = useState({});
     const [hoverCat, setHoverCat] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
-    const [showUserMenu, setShowUserMenu] = useState(false);
+    const [userHover, setUserHover] = useState(false);
 
+    // -----------------------------
+    // LOAD CATEGORIES (PUBLIC)
+    // -----------------------------
     useEffect(() => {
-        if (!currentUser) return;    // ← Chỉ load khi đã login
         loadCategories();
-    }, [currentUser]);
+    }, []);
+
+    const loadCategories = async () => {
+        try {
+            const res = await categoryApi.getAll();
+            const list = res.data.data.items || [];
+            setCategories(list);
+
+            // preload product for each category
+            list.forEach(cat => loadProducts(cat.id));
+        } catch (err) {
+            console.error("Category load failed", err);
+        }
+    };
 
     const loadProducts = async (categoryId) => {
         try {
@@ -38,12 +53,13 @@ export default function Header() {
     };
 
     const navigateCategory = (id) => {
-        setTimeout(() => navigate(`/menu/${id}`), 120);
+        navigate(`/menu/${id}`);
     };
 
     return (
         <header className="header-container">
 
+            {/* Logo */}
             <div className="header-left">
                 <img
                     src="/Images/Logo.png"
@@ -52,9 +68,11 @@ export default function Header() {
                 />
             </div>
 
+            {/* Menu */}
             <nav className="header-menu">
                 <button onClick={() => navigate("/")}>Trang chủ</button>
 
+                {/* Dropdown Insurance */}
                 <div
                     className="ins-menu-group"
                     onMouseEnter={() => setShowDropdown(true)}
@@ -64,20 +82,22 @@ export default function Header() {
 
                     {showDropdown && (
                         <div className="ins-mega-menu">
+
+                            {/* Left - categories */}
                             <div className="ins-mega-left">
                                 {categories.map(cat => (
                                     <div
                                         key={cat.id}
                                         className={`ins-mega-cat ${hoverCat === cat.id ? "active" : ""}`}
                                         onMouseEnter={() => setHoverCat(cat.id)}
-                                        onClick={() => navigate(`/menu/${cat.id}`)}
-
+                                        onClick={() => navigateCategory(cat.id)}
                                     >
                                         {cat.name}
                                     </div>
                                 ))}
                             </div>
 
+                            {/* Right - products */}
                             <div className="ins-mega-right">
                                 {(productsByCat[hoverCat] || []).slice(0, 6).map(p => (
                                     <div
@@ -92,6 +112,7 @@ export default function Header() {
                                     </div>
                                 ))}
 
+                                {/* Empty */}
                                 {productsByCat[hoverCat]?.length === 0 && (
                                     <div className="ins-mega-empty">Chưa có sản phẩm</div>
                                 )}
@@ -104,6 +125,7 @@ export default function Header() {
                 <button>Chi nhánh</button>
                 <button>Về chúng tôi</button>
 
+                {/* Admin menu */}
                 {currentUser?.role === "admin" && (
                     <>
                         <button onClick={() => navigate("/claim-list")}>Quản lý bồi thường</button>
@@ -113,6 +135,7 @@ export default function Header() {
                 )}
             </nav>
 
+            {/* User area */}
             <div
                 className="header-user"
                 onMouseEnter={() => setUserHover(true)}
@@ -131,9 +154,7 @@ export default function Header() {
                         )}
                     </div>
                 ) : (
-                    <Link className="login-btn" to="/Login">
-                        Đăng nhập
-                    </Link>
+                    <Link className="login-btn" to="/Login">Đăng nhập</Link>
                 )}
             </div>
 
