@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api/axiosClient";
+import { useParams, useNavigate } from "react-router-dom";
 import { productApi } from "../../api/product.api";
 import "./ProductList.css";
 
@@ -113,7 +114,6 @@ export default function ProductList() {
                     <p className="empty">Không có sản phẩm trong danh mục này.</p>
                 )}
             </main>
-
         </div>
     );
 }

@@ -1,4 +1,6 @@
-/* Header wrapper */
+/* ======================= */
+/*  HEADER WRAPPER */
+/* ======================= */
 .header-container {
     width: 100%;
     max-width: 1850px;
@@ -6,15 +8,14 @@
     background: #ffffff;
     display: flex;
     align-items: center;
-
     padding: 0 40px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
     position: sticky;
     top: 0;
-    z-index: 999;
+    z-index: 9999;
 }
 
-/* Logo trái */
+/* LOGO */
 .header-left {
     flex: 0 0 auto;
 }
@@ -24,10 +25,12 @@
     cursor: pointer;
 }
 
-/* Menu giữa */
+/* ======================= */
+/*  MAIN MENU */
+/* ======================= */
+
 .header-menu {
     flex: 1;
-    /* GIỮ MIDDLE */
     display: flex;
     justify-content: center;
     gap: 32px;
@@ -48,65 +51,149 @@
     color: #0B57D0;
 }
 
-/* Dropdown menu */
-.menu-dropdown {
+
+/* ======================= */
+/* MEGA MENU (CUSTOM PREFIX: ins-) */
+/* ======================= */
+
+.ins-menu-group {
     position: relative;
 }
 
-.dropdown-box {
-    position: absolute;
-    top: 40px;
-    left: 0;
-    min-width: 180px;
-    background: #fff;
-    padding: 10px 0;
-    border-radius: 10px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-.dropdown-box a {
-    display: block;
-    padding: 10px 18px;
+.ins-menu-group>button {
+    background: none;
+    border: none;
     color: #1A73E8;
-    text-decoration: none;
-    transition: 0.2s;
+    font-weight: 600;
+    cursor: pointer;
 }
 
-.dropdown-box a:hover {
-    background: #F0F6FF;
+.ins-menu-group:hover>button {
     color: #0B57D0;
 }
 
-/* User bên phải */
+/* MEGA MENU DROPDOWN WRAPPER */
+.ins-mega-menu {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 850px;
+    background: white;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    display: flex;
+    z-index: 2000;
+    padding: 20px;
+    gap: 20px;
+    min-height: 260px;
+}
+
+/* LEFT CATEGORY COLUMN */
+.ins-mega-left {
+    width: 28%;
+    border-right: 1px solid #e6e6e6;
+    padding-right: 10px;
+}
+
+.ins-mega-cat {
+    padding: 12px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.ins-mega-cat:hover,
+.ins-mega-cat.active {
+    background: #f2f6ff;
+    color: #0056c1;
+}
+
+/* RIGHT PRODUCT LIST */
+.ins-mega-right {
+    width: 72%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.ins-mega-product {
+    display: flex;
+    flex-direction: column;
+    background: #fafafa;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.15s ease;
+    border: 1px solid #eee;
+}
+
+.ins-mega-product:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ins-mega-info h4 {
+    margin: 8px 0 4px 0;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.ins-mega-info p {
+    font-size: 13px;
+    color: #777;
+}
+
+/* EMPTY CASE */
+.ins-mega-empty {
+    font-style: italic;
+    color: #666;
+    padding: 10px;
+}
+
+
+/* ======================= */
+/* USER SECTION */
+/* ======================= */
+
 .header-user {
     flex: 0 0 auto;
     display: flex;
     align-items: center;
+    position: relative;
 }
 
-.user-box {
+/* USER AREA (avatar + name) */
+.user-area {
     display: flex;
     align-items: center;
     gap: 6px;
     cursor: pointer;
     color: #1A73E8;
     font-weight: 600;
-    position: relative;
+    padding: 6px 10px;
+    border-radius: 8px;
 }
 
-/* User dropdown */
-.user-dropdown {
+.user-area:hover {
+    background: #f3f8ff;
+}
+
+/* DROPDOWN */
+.ins-user-dropdown {
     position: absolute;
     right: 0;
-    top: 40px;
+    top: 50px;
     background: #fff;
     padding: 10px 0;
     border-radius: 10px;
-    min-width: 160px;
+    min-width: 170px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    z-index: 3000;
 }
 
-.user-dropdown button {
+.ins-user-dropdown button {
     width: 100%;
     padding: 10px 16px;
     background: none;
@@ -114,15 +201,16 @@
     text-align: left;
     color: #1A73E8;
     cursor: pointer;
-    transition: .2s;
+    font-size: 14px;
+    transition: 0.2s;
 }
 
-.user-dropdown button:hover {
+.ins-user-dropdown button:hover {
     background: #F0F6FF;
     color: #0B57D0;
 }
 
-/* Login button */
+/* LOGIN BTN */
 .login-btn {
     padding: 8px 18px;
     background: #1A73E8;
