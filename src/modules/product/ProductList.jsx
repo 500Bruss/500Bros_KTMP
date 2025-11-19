@@ -1,136 +1,85 @@
 import React, { useEffect, useState } from "react";
-import Product from "./Product";
-import Banner from "../../components/layout/Banner";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { productApi } from "../../api/product.api";
+import "./ProductList.css";
 
-function ProductList({ onAdd }) {
-    const { category } = useParams(); // ✅ Lấy category từ URL (vd: /menu/Bảo hiểm Y tế)
+export default function ProductList() {
+    const { categoryId } = useParams();
+    const navigate = useNavigate();
+
     const [products, setProducts] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("All");
-    const [currentPage, setCurrentPage] = useState(1);
-    const productsPerPage = 4;
-    const bannerImages = ["/Images/nhantho1.jpg", "/Images/nhantho.jpg", "/Images/image.png"]
 
-    // ✅ Lấy dữ liệu từ server (db.json)
     useEffect(() => {
-        fetch("http://localhost:5005/products")
-            .then((res) => res.json())
-            .then((data) => setProducts(data))
-            .catch((err) => console.error("Lỗi khi fetch API:", err));
-    }, []);
+        const id = parseInt(categoryId);
+        if (!id || isNaN(id)) return; // tránh lỗi undefined
 
-    // ✅ Cập nhật category khi thay đổi URL
-    useEffect(() => {
-        if (category) {
-            setSelectedCategory(decodeURIComponent(category));
-        } else {
-            setSelectedCategory("All");
+        load(id);
+    }, [categoryId]);
+
+    const load = async (id) => {
+        try {
+            const res = await productApi.getByCategory(id);
+            setProducts(res.data.data.items || []);
+        } catch (err) {
+            console.log("Load products failed", err);
         }
-        setCurrentPage(1);
-    }, [category]);
-
-    // ✅ Lấy danh sách thể loại (loại bỏ khoảng trắng dư thừa)
-    const categories = ["All", ...new Set(products.map((p) => p.category.trim()))];
-
-    // ✅ Lọc sản phẩm theo tìm kiếm & thể loại
-    const filteredProducts = products.filter((p) => {
-        const matchSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchCategory =
-            selectedCategory === "All" ||
-            p.category.trim().toLowerCase() === selectedCategory.trim().toLowerCase();
-        return searchTerm.trim() !== "" ? matchSearch : matchCategory;
-    });
-
-    // ✅ Phân trang
-    const indexOfLastProduct = currentPage * productsPerPage;
-    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+    };
 
     return (
-        <div className="main-home">
-            <Banner images={bannerImages} />
-            <div className="main-title">
-                <h1>Hôm nay mua gì cho tương lai của mình?</h1>
-            </div>
+        <div className="product-container">
 
-            <div className="content-wrapper">
-                {/* Sidebar */}
-                <aside className="sidebar">
-                    <div className="search-bar">
-                        <input
-                            type="text"
-                            placeholder="Tìm sản phẩm..."
-                            value={searchTerm}
-                            onChange={(e) => {
-                                setSearchTerm(e.target.value);
-                                setCurrentPage(1);
-                            }}
-                        />
-                    </div>
-                    <h3>Danh mục bảo hiểm</h3>
-                    <div className="menu">
-                        {categories.map((c) => (
-                            <button
-                                key={c}
-                                className={selectedCategory === c ? "active" : ""}
-                                onClick={() => {
-                                    setSelectedCategory(c);
-                                    setSearchTerm("");
-                                    setCurrentPage(1);
-                                }}
-                            >
-                                {c === "All" ? "Tất cả các loại" : c}
-                            </button>
-                        ))}
-                    </div>
-                </aside>
+            {/* Sidebar Filter */}
+            <aside className="filter-box">
+                <h3 className="filter-title">Bộ lọc</h3>
 
-                {/* Danh sách sản phẩm */}
-                <div className="product-show">
-                    <div className="product-grid">
-                        {currentProducts.length > 0 ? (
-                            currentProducts.map((p) => (
-                                <Product key={p.id} product={p} onAdd={onAdd} />
-                            ))
-                        ) : (
-                            <p>Không tìm thấy loại bảo hiểm bạn cần</p>
-                        )}
-                    </div>
+                <div className="filter-group">
+                    <label>Giá</label>
+                    <select>
+                        <option>Tất cả</option>
+                        <option>Dưới 1 triệu</option>
+                        <option>1 - 5 triệu</option>
+                        <option>Trên 5 triệu</option>
+                    </select>
+                </div>
 
-                    {/* Phân trang */}
-                    {totalPages > 1 && (
-                        <div className="pagination">
+                <div className="filter-group">
+                    <label>Sắp xếp</label>
+                    <select>
+                        <option>Mới nhất</option>
+                        <option>Giá tăng dần</option>
+                        <option>Giá giảm dần</option>
+                    </select>
+                </div>
+            </aside>
+
+            {/* Product List */}
+            <main className="product-list">
+                <h2 className="list-title">
+                    Sản phẩm thuộc danh mục #{categoryId}
+                </h2>
+
+                {products.map((p) => (
+                    <div key={p.id} className="product-row">
+                        <div className="product-row-img"></div>
+
+                        <div className="product-row-info">
+                            <h3>{p.name}</h3>
+                            <p>{p.description?.slice(0, 100) || "Không có mô tả"}...</p>
+
                             <button
-                                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                                disabled={currentPage === 1}
+                                className="btn-row"
+                                onClick={() => navigate(`/Product-Detail/${p.id}`)}
                             >
-                                ⬅ Prev
-                            </button>
-                            {[...Array(totalPages)].map((_, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => setCurrentPage(i + 1)}
-                                    className={currentPage === i + 1 ? "active" : ""}
-                                >
-                                    {i + 1}
-                                </button>
-                            ))}
-                            <button
-                                onClick={() =>
-                                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                                }
-                                disabled={currentPage === totalPages}
-                            >
-                                Next ➡
+                                Xem chi tiết
                             </button>
                         </div>
-                    )}
-                </div>
-            </div>
+                    </div>
+                ))}
+
+                {products.length === 0 && (
+                    <p className="empty">Không có sản phẩm trong danh mục này.</p>
+                )}
+            </main>
         </div>
     );
 }
-
-export default ProductList;
