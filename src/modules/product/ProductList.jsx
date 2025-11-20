@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api/axiosClient";
 import { productApi } from "../../api/product.api";
+import { useNavigate } from "react-router-dom";
 import "./ProductList.css";
 
 export default function ProductList() {
+    const navigate = useNavigate();
 
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("all");
 
-    // ============================
-    // LOAD DANH MỤC
-    // ============================
     const loadCategories = async () => {
         try {
             const res = await api.get("/api/categories", {
@@ -23,13 +22,9 @@ export default function ProductList() {
         }
     };
 
-    // ============================
-    // LOAD SẢN PHẨM
-    // ============================
     const loadProducts = async () => {
         try {
             if (selectedCategory === "all") {
-                // lấy tất cả sản phẩm
                 const res = await api.get("/api/products", {
                     params: { all: true, sort: "createdAt,desc" },
                 });
@@ -37,10 +32,8 @@ export default function ProductList() {
                 return;
             }
 
-            // Lấy theo category
             const res = await productApi.getByCategory(selectedCategory);
             setProducts(res.data.data.items || []);
-
         } catch (err) {
             console.log("Load products failed", err);
         }
@@ -48,7 +41,7 @@ export default function ProductList() {
 
     useEffect(() => {
         loadCategories();
-        loadProducts(); // load mặc định tất cả sản phẩm khi vào
+        loadProducts();
     }, []);
 
     useEffect(() => {
@@ -58,11 +51,10 @@ export default function ProductList() {
     return (
         <div className="product-container">
 
-            {/* Sidebar Category */}
+            {/* Sidebar Categories */}
             <aside className="filter-box">
                 <h3 className="filter-title">Danh mục</h3>
 
-                {/* Tất cả sản phẩm */}
                 <div
                     className={`category-item ${selectedCategory === "all" ? "active" : ""}`}
                     onClick={() => setSelectedCategory("all")}
@@ -70,7 +62,6 @@ export default function ProductList() {
                     Tất cả sản phẩm
                 </div>
 
-                {/* Categories từ API */}
                 {categories.map((cat) => (
                     <div
                         key={cat.id}
@@ -92,7 +83,12 @@ export default function ProductList() {
 
                 <div className="product-grid">
                     {products.map((p) => (
-                        <div key={p.id} className="product-card">
+                        <div
+                            key={p.id}
+                            className="product-card"
+                            onClick={() => navigate(`/Product-Detail/${p.id}`)}
+                            style={{ cursor: "pointer" }}
+                        >
                             <div className="product-img">🛡️</div>
 
                             <div className="product-name">{p.name}</div>
@@ -107,7 +103,6 @@ export default function ProductList() {
                         </div>
                     ))}
                 </div>
-
 
                 {products.length === 0 && (
                     <p className="empty">Không có sản phẩm trong danh mục này.</p>

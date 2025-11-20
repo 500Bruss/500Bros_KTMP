@@ -7,7 +7,7 @@ import Footer from "./components/layout/Footer";
 
 import LoginPage from "./modules/auth/page/Login";
 import Register from "./modules/auth/page/Register";
-
+import Quote from "./modules/order/Quote";
 import ProductList from "./modules/product/ProductList";
 import ProductDetail from "./modules/product/ProductDetail";
 import Cart from "./modules/payment/Cart";
@@ -21,18 +21,12 @@ import { useAuth } from "./modules/auth/hook/useAuth"; // 🔥 lấy user từ A
 import "./App.css";
 
 function App() {
-  const auth = useAuth();
+  const { currentUser, login, logout } = useAuth(); // ✔ lấy user trước
 
-  if (!auth) return null;   // tránh lỗi khi context chưa loaded
-
-  const { currentUser, login, logout } = auth;
-  // 🔥 LẤY currentUser từ AuthContext
+  if (currentUser === undefined) return null; // ✔ chặn render khi chưa load
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  // ==========================
-  // 🛒 QUẢN LÝ GIỎ HÀNG
-  // ==========================
   const [cart, setCart] = useState([]);
 
   // Load cart theo user
@@ -56,38 +50,29 @@ function App() {
     }
   }, [cart, currentUser]);
 
-
-  // Cart Actions
   const handleAdd = (product) => {
-    setCart((prev) => {
-      const idx = prev.findIndex((p) => p.id === product.id);
+    setCart(prev => {
+      const idx = prev.findIndex(p => p.id === product.id);
       if (idx === -1) return [...prev, { ...product, quantity: 1 }];
-      return prev.map((p) =>
+      return prev.map(p =>
         p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
       );
     });
   };
 
   const handleRemove = (id) => {
-    setCart((prev) => prev.filter((p) => p.id !== id));
+    setCart(prev => prev.filter(p => p.id !== id));
   };
 
   const handleChangeQuantity = (id, qty) => {
     if (qty <= 0) {
-      setCart((prev) => prev.filter((p) => p.id !== id));
+      setCart(prev => prev.filter(p => p.id !== id));
     } else {
-      setCart((prev) =>
-        prev.map((p) => (p.id === id ? { ...p, quantity: qty } : p))
+      setCart(prev =>
+        prev.map(p => (p.id === id ? { ...p, quantity: qty } : p))
       );
     }
   };
-
-
-  // Wrapper để nhận category từ URL
-  function MenuWrapper({ onAdd }) {
-    const { category } = useParams();
-    return <ProductList onAdd={onAdd} defaultCategory={category} />;
-  }
 
   return (
     <div className="app">
@@ -99,52 +84,29 @@ function App() {
 
       <main className="routes-container">
         <Routes>
-          {/* 🏠 HOME */}
           <Route path="/" element={<Home />} />
-
-          {/* 📦 PRODUCT */}
           <Route path="/productlist" element={<ProductList onAdd={handleAdd} searchTerm={searchTerm} />} />
-
           <Route path="/menu" element={<ProductList onAdd={handleAdd} />} />
-          <Route path="/Product-Detail/:id" element={<ProductDetail onAdd={handleAdd} />} />
           <Route path="/menu/:categoryId" element={<ProductList />} />
-
-          {/* 👤 AUTH */}
+          <Route path="/quote" element={<Quote />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/Product-Detail/:id" element={<ProductDetail onAdd={handleAdd} />} />
-          <Route path="/menu/:categoryId" element={<ProductList />} />
 
-
-          {/* 👤 AUTH */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<Register />} />
-
-          {/* 📑 ORDER */}
           <Route path="/order-history" element={<OrderHistory />} />
           <Route path="/seller-orders" element={<SellerOrders />} />
 
-          {/* 🛒 CART / CHECKOUT  <Route path="/menu/:category" element={<MenuWrapper onAdd={handleAdd} />} />*/}
-          <Route
-            path="/cart"
-            element={
-              <Cart
-                cart={cart}
-                onRemove={handleRemove}
-                onChangeQuantity={handleChangeQuantity}
-              />
-            }
-          />
+          <Route path="/cart" element={
+            <Cart
+              cart={cart}
+              onRemove={handleRemove}
+              onChangeQuantity={handleChangeQuantity}
+            />
+          } />
 
-          <Route
-            path="/checkout"
-            element={
-              <Checkout
-                cart={cart}
-                setCart={setCart}
-              />
-            }
-          />
+          <Route path="/checkout" element={
+            <Checkout cart={cart} setCart={setCart} />
+          } />
         </Routes>
       </main>
 
@@ -152,5 +114,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;

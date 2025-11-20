@@ -1,0 +1,113 @@
+.quote-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.quote-title {
+    text-align: center;
+    color: #003e9a;
+    margin-bottom: 25px;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.quote-card {
+    background: #ffffff;
+    padding: 20px 25px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.quote-card h3 {
+    margin-bottom: 15px;
+    color: #003e9a;
+}
+
+.quote-code {
+    font-size: 18px;
+    font-weight: 600;
+    color: #d9534f;
+}
+
+.quote-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.quote-table td {
+    padding: 8px 0;
+    font-size: 15px;
+}
+
+/* JSON BLOCK */
+.json-box {
+    background: #f1f7ff;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 4px solid #0a58ca;
+}
+
+.json-box.small {
+    background: #f9f9f9;
+    margin-top: 10px;
+}
+
+.json-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+}
+
+.json-key {
+    font-weight: 600;
+    color: #003e9a;
+}
+
+.json-value {
+    color: #444;
+}
+
+/* Addon Display */
+.addon-box {
+    padding: 12px 15px;
+    background: #fff9ef;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    border-left: 4px solid #ff9800;
+}
+
+.addon-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.addon-desc {
+    color: #666;
+    margin-bottom: 5px;
+}
+
+/* Price */
+.addon-price {
+    margin-top: 10px;
+    font-size: 15px;
+}
+
+/* Button */
+.confirm-btn {
+    width: 100%;
+    padding: 14px;
+    background: #003e9a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.confirm-btn:hover {
+    background: #0055cc;
+}
