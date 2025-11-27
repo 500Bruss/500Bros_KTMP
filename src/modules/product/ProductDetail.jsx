@@ -1,7 +1,6 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../api/axiosClient";
-import { addonApi } from "../../api/addon.api";
 import "./ProductDetail.css";
 
 // =====================================
@@ -26,22 +25,22 @@ const renderJsonTable = (obj) => {
     );
 };
 
-function ProductDetail() {
+export default function ProductDetail() {
     const { id } = useParams();
+    const navigate = useNavigate();
+
     const [product, setProduct] = useState(null);
     const [addons, setAddons] = useState([]);
     const [selectedAddons, setSelectedAddons] = useState([]);
 
-    const navigate = useNavigate();
-
-    // ============================
-    // LOAD PRODUCT
-    // ============================
+    // 🟢 LOAD PRODUCT + ADDONS TRONG 1 API
     useEffect(() => {
         api.get(`/api/products/${id}`)
             .then((res) => {
                 const p = res.data.data;
+                if (!p) return;
 
+                // Parse baseCover & metadata nếu là JSON
                 p.baseCoverParsed =
                     typeof p.baseCover === "string"
                         ? JSON.parse(p.baseCover)
@@ -52,21 +51,8 @@ function ProductDetail() {
                         ? JSON.parse(p.metadata)
                         : p.metadata;
 
-                setProduct(p);
-            })
-            .catch((err) => console.error("Lỗi khi fetch sản phẩm:", err));
-    }, [id]);
-
-    // ============================
-    // LOAD ADDONS
-    // ============================
-    useEffect(() => {
-        if (!product) return;
-
-        addonApi
-            .getByProduct(product.id)
-            .then((res) => {
-                const arr = (res.data.data.items || []).map((a) => ({
+                // Addons list
+                const addonArr = (p.addonsList || []).map((a) => ({
                     ...a,
                     metaParsed:
                         typeof a.metaData === "string"
@@ -74,10 +60,11 @@ function ProductDetail() {
                             : a.metaData,
                 }));
 
-                setAddons(arr);
+                setProduct(p);
+                setAddons(addonArr);
             })
-            .catch((err) => console.error("Lỗi load addons:", err));
-    }, [product]);
+            .catch((err) => console.error("Lỗi load sản phẩm:", err));
+    }, [id]);
 
     if (!product) return <p>Đang tải...</p>;
 
@@ -85,15 +72,12 @@ function ProductDetail() {
     // CHỌN ADDON
     // ============================
     const toggleAddon = (addonId) => {
-        setSelectedAddons((prev) =>
-            prev.includes(addonId)
-                ? prev.filter((x) => x !== addonId)
-                : [...prev, addonId]
-        );
+        setSelectedAddons([addonId]);
     };
 
+
     // ============================
-    // BÁO GIÁ
+    // ĐI TIẾP TRANG QUOTE
     // ============================
     const handleContinueQuote = () => {
         const payload = {
@@ -136,7 +120,7 @@ function ProductDetail() {
             </section>
 
             {/* ======================= */}
-            {/* QUYỀN LỢI BỔ SUNG */}
+            {/* ADDONS */}
             {/* ======================= */}
             {addons.length > 0 && (
                 <section className="bonus-section">
@@ -153,10 +137,12 @@ function ProductDetail() {
                             >
                                 <div className="addon-header">
                                     <input
-                                        type="checkbox"
+                                        type="radio"
+                                        name="addon"
                                         checked={isSelected}
                                         readOnly
                                     />
+
                                     <span className="addon-title">{a.name}</span>
                                 </div>
 
@@ -197,5 +183,3 @@ function ProductDetail() {
         </div>
     );
 }
-
-export default ProductDetail;

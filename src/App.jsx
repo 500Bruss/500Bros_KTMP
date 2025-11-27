@@ -8,6 +8,9 @@ import Footer from "./components/layout/Footer";
 import LoginPage from "./modules/auth/page/Login";
 import Register from "./modules/auth/page/Register";
 import Quote from "./modules/order/Quote";
+import ApplicationDetail from "./modules/order/ApplicationDetail";
+import ApplicationForm from "./modules/order/ApplicationForm";
+
 import ProductList from "./modules/product/ProductList";
 import ProductDetail from "./modules/product/ProductDetail";
 import Cart from "./modules/payment/Cart";
@@ -92,6 +95,10 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/Product-Detail/:id" element={<ProductDetail onAdd={handleAdd} />} />
+
+          <Route path="/ApplicationForm" element={<ApplicationForm />} />
+          <Route path="/application/:id" element={<ApplicationDetail />} />
+
 
           <Route path="/order-history" element={<OrderHistory />} />
           <Route path="/seller-orders" element={<SellerOrders />} />

@@ -1,0 +1,96 @@
+.application-container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 25px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+/* ===== Quote Summary ===== */
+.quote-summary {
+    padding: 15px 20px;
+    border-radius: 10px;
+    background: #f6f7ff;
+    border: 1px solid #e0e3ff;
+    margin-bottom: 30px;
+}
+
+.quote-summary p {
+    margin: 6px 0;
+    font-size: 15px;
+}
+
+/* ===== Form ===== */
+.app-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.app-form h3 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #444;
+}
+
+/* Input style */
+.app-form input,
+.app-form select {
+    padding: 12px 14px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #d9d9d9;
+    background: #fafafa;
+    transition: 0.2s ease;
+}
+
+.app-form input:focus,
+.app-form select:focus {
+    outline: none;
+    border-color: #5865f2;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.25);
+}
+
+/* Submit button */
+.submit-btn {
+    margin-top: 20px;
+    padding: 12px 0;
+    font-size: 17px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #5865f2;
+    color: white;
+    transition: 0.2s ease;
+}
+
+.submit-btn:hover {
+    background: #4753d8;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+    from {
+        transform: translateY(10px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

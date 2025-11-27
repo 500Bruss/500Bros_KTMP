@@ -1,12 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { quoteApi } from "../../api/quote.api";
 import "./Quote.css";
 
 export default function Quote() {
     const navigate = useNavigate();
     const [quote, setQuote] = useState(null);
 
+    const createdRef = useRef(false);
+
     useEffect(() => {
+        if (createdRef.current) return;
+        createdRef.current = true;
+
         const raw = localStorage.getItem("quoteData");
         if (!raw) {
             navigate("/");
@@ -15,57 +21,71 @@ export default function Quote() {
 
         const data = JSON.parse(raw);
 
-        // Tạo quote_code giả lập
-        const quote_code = "QT-" + Date.now();
+        // inputData sẽ lấy từ metadataParsed
+        const inputObject = {
+            age: data.age || 30,
+            gender: data.gender || "male",
+            ...(data.product.metadataParsed || {})
+        };
 
-        setQuote({
-            quote_code,
-            user_id: 12345, // giả lập
-            product_id: data.product.id,
-            input_data: {
-                age: 30,
-                gender: "male",
-                coverage: "full",
-                ...data.product.metadataParsed // merge metadata vào input luôn
-            },
-            addons: data.addons || [],
-            premium: Number(data.product.price),
-            currency: "VND",
-            status: "CALCULATED",
-            valid_until: "2025-12-31T23:59:59.999",
-            created_at: new Date().toISOString(),
-        });
+        const payload = {
+            productId: data.product.id,      // để nguyên number cũng ok
+            inputData: JSON.stringify(inputObject)
+        };
+
+        console.log("Payload gửi BE:", payload);
+
+        quoteApi.create(payload)
+            .then((res) => {
+                const q = res.data.data;
+
+                console.log("Quote từ BE:", q);
+
+                // ✔ KHÔNG ép id = "1"
+                // ✔ ID trả từ BE đã là String (backend sửa rồi)
+                const safeQuote = {
+                    ...q,
+                    id: q.id,                         // luôn là String
+                    productId: q.productId?.toString(),
+                    userId: q.userId?.toString()
+                };
+
+                console.log("SAFE QUOTE FE:", safeQuote);
+
+                localStorage.setItem("createdQuote", JSON.stringify(safeQuote));
+                setQuote(safeQuote);
+            })
+            .catch((err) => console.error("ERROR:", err));
     }, []);
 
-    if (!quote) return <p>Đang tải báo giá...</p>;
+    if (!quote) return <p>Đang tạo báo giá...</p>;
 
     return (
         <div className="quote-container">
-
             <h2 className="quote-title">📄 Báo giá bảo hiểm</h2>
 
-            {/* ===== Quote Info ===== */}
             <div className="quote-card">
                 <h3>Mã báo giá</h3>
-                <p className="quote-code">{quote.quote_code}</p>
+                {/* Hiển thị chuẩn ID lớn */}
+                <p className="quote-code">{quote.id}</p>
 
                 <table className="quote-table">
                     <tbody>
-                        <tr><td>Người yêu cầu</td><td>{quote.user_id}</td></tr>
-                        <tr><td>Gói bảo hiểm</td><td>{quote.product_id}</td></tr>
+                        <tr><td>Người yêu cầu</td><td>{quote.userId}</td></tr>
+                        <tr><td>Gói bảo hiểm</td><td>{quote.productId}</td></tr>
+                        <tr><td>Sản phẩm</td><td>{quote.productName}</td></tr>
+                        <tr><td>Giá trị báo giá</td><td>{quote.premium?.toLocaleString()} VND</td></tr>
                         <tr><td>Trạng thái</td><td>{quote.status}</td></tr>
-                        <tr><td>Loại tiền</td><td>{quote.currency}</td></tr>
-                        <tr><td>Giá trị báo giá</td><td>{quote.premium.toLocaleString()} VND</td></tr>
-                        <tr><td>Hạn hiệu lực</td><td>{quote.valid_until}</td></tr>
+                        <tr><td>Hiệu lực đến</td><td>{quote.validUntil}</td></tr>
                     </tbody>
                 </table>
             </div>
 
-            {/* ===== Input Data JSON_render ===== */}
             <div className="quote-card">
                 <h3>Thông tin tính phí</h3>
+
                 <div className="json-box">
-                    {Object.entries(quote.input_data).map(([key, val]) => (
+                    {Object.entries(JSON.parse(quote.inputData)).map(([key, val]) => (
                         <div key={key} className="json-row">
                             <span className="json-key">{key}</span>
                             <span className="json-value">{String(val)}</span>
@@ -74,40 +94,12 @@ export default function Quote() {
                 </div>
             </div>
 
-            {/* ===== Addons ===== */}
-            {quote.addons.length > 0 && (
-                <div className="quote-card">
-                    <h3>Quyền lợi bổ sung đã chọn</h3>
-
-                    {quote.addons.map((a) => (
-                        <div key={a.id} className="addon-box">
-                            <p className="addon-title">⭐ {a.name}</p>
-                            <p className="addon-desc">{a.description}</p>
-
-                            {/* Addon metadata */}
-                            {a.metaParsed && (
-                                <div className="json-box small">
-                                    {Object.entries(a.metaParsed).map(([k, v]) => (
-                                        <div key={k} className="json-row">
-                                            <span className="json-key">{k}</span>
-                                            <span className="json-value">{String(v)}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-
-                            <p className="addon-price">
-                                Giá: <strong>{a.price.toLocaleString()} VND</strong>
-                            </p>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            <button className="confirm-btn" onClick={() => navigate("/checkout")}>
-                Tiếp tục thanh toán →
+            <button
+                className="confirm-btn"
+                onClick={() => navigate("/ApplicationForm")}
+            >
+                Tiếp tục tạo hồ sơ →
             </button>
-
         </div>
     );
 }
