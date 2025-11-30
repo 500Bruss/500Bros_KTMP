@@ -596,3 +596,103 @@ button:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   transform: translateY(-3px);
 }
+
+/* Payment */
+.payment-page,
+.payment-result-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 12px;
+}
+
+.payment-card,
+.result-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 560px;
+  box-shadow: 0 10px 30px rgba(16, 36, 58, 0.08);
+}
+
+.payment-card h2,
+.result-card h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.payment-card .subtitle {
+  color: #6b7280;
+  margin: 4px 0 16px;
+}
+
+.payment-summary {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.payment-summary div {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f9fafb;
+  border: 1px solid #eef1f6;
+}
+
+.payment-card .note,
+.result-card .note {
+  color: #9a3324;
+  background: #fff4f2;
+  border: 1px solid #f8d5ce;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 8px;
+}
+
+.payment-card .error {
+  color: #b91c1c;
+  margin-top: 8px;
+}
+
+.payment-card .actions,
+.result-card .actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.payment-card .btn-primary,
+.result-card .btn-primary {
+  flex: 1;
+}
+
+.payment-card .btn-secondary,
+.result-card .btn-secondary {
+  padding: 10px 16px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.result-card {
+  text-align: center;
+}
+
+.result-card.success {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
+.result-card.failed {
+  border-color: #fecdd3;
+  background: #fff1f2;
+}
+
+.result-card .message {
+  margin: 12px 0 4px;
+}

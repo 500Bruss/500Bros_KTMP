@@ -1,162 +1,199 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { applicationApi } from "../../api/application.api";
+import { useAuth } from "../auth/hook/useAuth";
 import "./ApplicationForm.css";
 
 export default function ApplicationForm() {
-    const fixedId = 1;
+  const navigate = useNavigate();
+  const { currentUser } = useAuth();
+  const [quote, setQuote] = useState(null);
 
-    const navigate = useNavigate();
-    const [quote, setQuote] = useState(null);
+  const [applicantData, setApplicantData] = useState({
+    fullName: "",
+    age: "",
+    gender: "",
+    phone: "",
+  });
 
-    const [applicantData, setApplicantData] = useState({
-        fullName: "",
-        age: "",
-        gender: "",
-        phone: "",
-    });
+  const [insuredData, setInsuredData] = useState({
+    fullName: "",
+    age: "",
+    relationship: "",
+  });
 
-    const [insuredData, setInsuredData] = useState({
-        fullName: "",
-        age: "",
-        relationship: "",
-    });
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/login");
+      return;
+    }
+    const raw = localStorage.getItem("createdQuote");
+    if (!raw) {
+      alert("Chưa có báo giá!");
+      navigate("/");
+      return;
+    }
+    const q = JSON.parse(raw);
+    setQuote(q);
+  }, [currentUser, navigate]);
 
-    useEffect(() => {
-        const raw = localStorage.getItem("createdQuote");
-        if (!raw) {
-            alert("Chưa có báo giá!");
-            navigate("/");
-            return;
-        }
+  const submitForm = async (e) => {
+    e.preventDefault();
+    if (!quote) return;
 
-        const q = JSON.parse(raw);
-        setQuote(q);
-    }, []);
+    // ===== VALIDATION TUỔI =====
+    if (parseInt(applicantData.age) < 18) {
+      alert("Người yêu cầu phải từ 18 tuổi trở lên!");
+      return;
+    }
+    if (parseInt(insuredData.age) < 1) {
+      alert("Người được bảo hiểm phải từ 1 tuổi trở lên!");
+      return;
+    }
 
-    const submitForm = async (e) => {
-        e.preventDefault();
+    const body = { applicantData, insuredData };
 
-        if (!quote) return;
+    try {
+      const res = await applicationApi.create(quote.id, body);
+      const app = res.data.data;
+      localStorage.setItem("createdApplication", JSON.stringify(app));
+      alert("Tạo hồ sơ thành công!");
+      navigate(`/application/${app.id}`);
+    } catch (err) {
+      const msg =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Không thể tạo hồ sơ. Vui lòng thử lại.";
+      alert(msg);
+    }
+  };
 
-        // ⭐ HARD CODE QUOTE ID LUÔN = 1
-        const hardQuoteId = 1;
+  if (!quote) return <p>Đang tải báo giá...</p>;
 
-        console.log("⚠ HARD QUOTE ID gửi BE:", hardQuoteId);
+  return (
+    <div className="application-wrapper">
 
-        const body = {
-            applicantData,
-            insuredData
-        };
+      {/* === KHUNG BÁO GIÁ === */}
+      <div className="form-section-box">
+        <h2 className="section-title">Thông tin báo giá</h2>
 
-        try {
-            const res = await applicationApi.create(hardQuoteId, body);
-            const app = res.data.data;
+        <div className="info-row"><span className="label">Mã báo giá:</span> {quote.id}</div>
+        <div className="info-row"><span className="label">Sản phẩm:</span> {quote.productName}</div>
+        <div className="info-row">
+          <span className="label">Premium:</span> {quote.premium?.toLocaleString()} VND
+        </div>
+      </div>
 
-            localStorage.setItem("createdApplication", JSON.stringify(app));
+      {/* === FORM === */}
+      <form onSubmit={submitForm}>
 
-            alert("Tạo hồ sơ thành công!");
-            navigate(`/application/${app.id}`);
+        {/* ===== KHUNG 1: Người yêu cầu ===== */}
+        <div className="form-section-box">
+          <h2 className="section-title">Thông tin người yêu cầu</h2>
 
-        } catch (err) {
-            console.error("Application create failed:", err);
-            alert("Không thể tạo Application");
-        }
-    };
-
-    if (!quote) return <p>Đang tải báo giá...</p>;
-
-    return (
-        <div className="application-container">
-            <h2 className="title">📝 Tạo hồ sơ yêu cầu bảo hiểm</h2>
-
-            <div className="quote-summary">
-                <p><b>Mã báo giá:</b> {quote.id}</p>
-                <p><b>Sản phẩm:</b> {quote.productName}</p>
-                <p><b>Phí premium:</b> {quote.premium.toLocaleString()} VND</p>
+          <div className="form-group-inline">
+            <div className="form-group">
+              <label>Họ tên</label>
+              <input
+                type="text"
+                value={applicantData.fullName}
+                onChange={(e) =>
+                  setApplicantData({ ...applicantData, fullName: e.target.value })
+                }
+                required
+              />
             </div>
 
-            <form className="app-form" onSubmit={submitForm}>
-                <h3>Thông tin người yêu cầu</h3>
+            <div className="form-group">
+              <label>Tuổi</label>
+              <input
+                type="number"
+                min="18"
+                value={applicantData.age}
+                onChange={(e) =>
+                  setApplicantData({ ...applicantData, age: e.target.value })
+                }
+                required
+              />
+            </div>
+          </div>
 
-                <input
-                    type="text"
-                    placeholder="Họ tên"
-                    value={applicantData.fullName}
-                    onChange={(e) =>
-                        setApplicantData({ ...applicantData, fullName: e.target.value })
-                    }
-                    required
-                />
+          <div className="form-group-inline">
+            <div className="form-group">
+              <label>Giới tính</label>
+              <select
+                value={applicantData.gender}
+                onChange={(e) =>
+                  setApplicantData({ ...applicantData, gender: e.target.value })
+                }
+                required
+              >
+                <option value="">-- Chọn --</option>
+                <option value="MALE">Nam</option>
+                <option value="FEMALE">Nữ</option>
+              </select>
+            </div>
 
-                <input
-                    type="number"
-                    placeholder="Tuổi"
-                    value={applicantData.age}
-                    onChange={(e) =>
-                        setApplicantData({ ...applicantData, age: e.target.value })
-                    }
-                    required
-                />
-
-                <select
-                    value={applicantData.gender}
-                    onChange={(e) =>
-                        setApplicantData({ ...applicantData, gender: e.target.value })
-                    }
-                    required
-                >
-                    <option value="">Giới tính</option>
-                    <option value="MALE">Nam</option>
-                    <option value="FEMALE">Nữ</option>
-                </select>
-
-                <input
-                    type="text"
-                    placeholder="Số điện thoại"
-                    value={applicantData.phone}
-                    onChange={(e) =>
-                        setApplicantData({ ...applicantData, phone: e.target.value })
-                    }
-                    required
-                />
-
-                <h3>Thông tin người được bảo hiểm</h3>
-
-                <input
-                    type="text"
-                    placeholder="Họ tên"
-                    value={insuredData.fullName}
-                    onChange={(e) =>
-                        setInsuredData({ ...insuredData, fullName: e.target.value })
-                    }
-                    required
-                />
-
-                <input
-                    type="number"
-                    placeholder="Tuổi"
-                    value={insuredData.age}
-                    onChange={(e) =>
-                        setInsuredData({ ...insuredData, age: e.target.value })
-                    }
-                    required
-                />
-
-                <input
-                    type="text"
-                    placeholder="Mối quan hệ"
-                    value={insuredData.relationship}
-                    onChange={(e) =>
-                        setInsuredData({ ...insuredData, relationship: e.target.value })
-                    }
-                    required
-                />
-
-                <button className="submit-btn" type="submit">
-                    Gửi hồ sơ →
-                </button>
-            </form>
+            <div className="form-group">
+              <label>Số điện thoại</label>
+              <input
+                type="text"
+                value={applicantData.phone}
+                onChange={(e) =>
+                  setApplicantData({ ...applicantData, phone: e.target.value })
+                }
+                required
+              />
+            </div>
+          </div>
         </div>
-    );
+
+        {/* ===== KHUNG 2: Người được bảo hiểm ===== */}
+        <div className="form-section-box">
+          <h2 className="section-title">Thông tin người được bảo hiểm</h2>
+
+          <div className="form-group-inline">
+            <div className="form-group">
+              <label>Họ tên</label>
+              <input
+                type="text"
+                value={insuredData.fullName}
+                onChange={(e) =>
+                  setInsuredData({ ...insuredData, fullName: e.target.value })
+                }
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Tuổi</label>
+              <input
+                type="number"
+                min="1"
+                value={insuredData.age}
+                onChange={(e) =>
+                  setInsuredData({ ...insuredData, age: e.target.value })
+                }
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>Mối quan hệ</label>
+            <input
+              type="text"
+              value={insuredData.relationship}
+              onChange={(e) =>
+                setInsuredData({ ...insuredData, relationship: e.target.value })
+              }
+              required
+            />
+          </div>
+        </div>
+
+        <button className="checkout-btn">Gửi hồ sơ</button>
+      </form>
+    </div>
+  );
 }

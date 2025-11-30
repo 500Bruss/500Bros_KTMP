@@ -1,96 +1,181 @@
-.application-container {
-    max-width: 700px;
+.application-wrapper {
+    max-width: 780px;
     margin: 30px auto;
-    padding: 25px;
+    padding: 10px 18px 40px;
+}
+
+/* ===== CARD ===== */
+.checkout-card {
     background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    animation: fadeIn 0.3s ease-in-out;
+    border-radius: 14px;
+    padding: 22px 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    margin-bottom: 28px;
+    border: 1px solid #f0f0f0;
 }
 
-.title {
-    text-align: center;
-    font-size: 26px;
-    font-weight: 700;
-    margin-bottom: 25px;
-    color: #333;
-}
-
-/* ===== Quote Summary ===== */
-.quote-summary {
-    padding: 15px 20px;
-    border-radius: 10px;
-    background: #f6f7ff;
-    border: 1px solid #e0e3ff;
-    margin-bottom: 30px;
-}
-
-.quote-summary p {
-    margin: 6px 0;
+.section-title {
     font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    color: #333;
+    text-transform: uppercase;
+    border-bottom: 1px solid #000000;
 }
 
-/* ===== Form ===== */
-.app-form {
+/* ===== SUMMARY ===== */
+.summary-row {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #f4f4f4;
 }
 
-.app-form h3 {
-    margin-top: 10px;
-    margin-bottom: 5px;
-    font-size: 20px;
+.summary-row:last-child {
+    border-bottom: none;
+}
+
+.summary-row .label {
     font-weight: 600;
     color: #444;
 }
 
-/* Input style */
-.app-form input,
-.app-form select {
-    padding: 12px 14px;
-    font-size: 15px;
-    border-radius: 8px;
-    border: 1px solid #d9d9d9;
-    background: #fafafa;
-    transition: 0.2s ease;
+.summary-row .value {
+    font-weight: 500;
+    color: #222;
 }
 
-.app-form input:focus,
-.app-form select:focus {
-    outline: none;
-    border-color: #5865f2;
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.25);
+/* ===== FORM ===== */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
-/* Submit button */
-.submit-btn {
-    margin-top: 20px;
-    padding: 12px 0;
-    font-size: 17px;
+.form-group-inline {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    font-size: 14px;
     font-weight: 600;
+    margin-bottom: 6px;
+    color: #444;
+}
+
+/* ===== INPUT STYLE ===== */
+.form-group input,
+.form-group select {
+    padding: 12px 14px;
+    border-radius: 15px;
+    border: 1px solid #ddd;
+    background: #fafafa;
+    transition: 0.2s;
+    font-size: 15px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #3651ff;
+    background: #fff;
+    box-shadow: 0 0 0 2px rgba(255, 122, 0, 0.25);
+    outline: none;
+}
+
+.mt20 {
+    margin-top: 22px;
+}
+
+/* ===== BUTTON ===== */
+.checkout-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px 0;
+    font-size: 17px;
+    font-weight: 700;
     border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background: #5865f2;
+    border-radius: 10px;
+    background: linear-gradient(45deg, #f4b37f, #49b6ff);
     color: white;
-    transition: 0.2s ease;
+    cursor: pointer;
+    transition: 0.25s;
 }
 
-.submit-btn:hover {
-    background: #4753d8;
+.checkout-btn:hover {
+    opacity: 0.9;
 }
 
-/* Fade in animation */
-@keyframes fadeIn {
-    from {
-        transform: translateY(10px);
-        opacity: 0;
-    }
+/* ===== KHUNG FORM ===== */
+.form-section-box {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 26px;
+}
 
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #333;
+}
+
+.info-row {
+    padding: 6px 0;
+    font-size: 15px;
+}
+
+.info-row .label {
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+/* ===== INPUT ===== */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form-group-inline {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: #fafafa;
+}
+
+/* ===== BUTTON ===== */
+.checkout-btn {
+    width: 100%;
+    margin-top: 14px;
+    padding: 14px 0;
+    border-radius: 10px;
+    background: linear-gradient(45deg, #ff7b00, #ff9500);
+    color: white;
+    font-size: 17px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.checkout-btn:hover {
+    opacity: 0.9;
 }

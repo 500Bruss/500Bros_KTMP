@@ -11,17 +11,28 @@ export default function ProductList() {
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("all");
 
+    // =======================
+    // LOAD CATEGORIES
+    // =======================
     const loadCategories = async () => {
         try {
             const res = await api.get("/api/categories", {
                 params: { all: true, sort: "createdAt,desc" },
             });
-            setCategories(res.data.data.items || []);
+
+            const list = res.data.data.items || [];
+
+            // BE trả category như:
+            // { id, code, name, ... }
+            setCategories(list);
         } catch (err) {
             console.log("Load categories failed", err);
         }
     };
 
+    // =======================
+    // LOAD PRODUCTS
+    // =======================
     const loadProducts = async () => {
         try {
             if (selectedCategory === "all") {
@@ -32,6 +43,7 @@ export default function ProductList() {
                 return;
             }
 
+            // lấy sản phẩm theo categoryId
             const res = await productApi.getByCategory(selectedCategory);
             setProducts(res.data.data.items || []);
         } catch (err) {
@@ -49,14 +61,15 @@ export default function ProductList() {
     }, [selectedCategory]);
 
     return (
-        <div className="product-container">
+        <div className="showcase-wrapper">
 
-            {/* Sidebar Categories */}
-            <aside className="filter-box">
-                <h3 className="filter-title">Danh mục</h3>
+            {/* =================== SIDEBAR =================== */}
+            <aside className="showcase-sidebar">
+                <h3 className="sidebar-title">Danh mục</h3>
 
                 <div
-                    className={`category-item ${selectedCategory === "all" ? "active" : ""}`}
+                    className={`sidebar-item ${selectedCategory === "all" ? "active" : ""
+                        }`}
                     onClick={() => setSelectedCategory("all")}
                 >
                     Tất cả sản phẩm
@@ -65,50 +78,54 @@ export default function ProductList() {
                 {categories.map((cat) => (
                     <div
                         key={cat.id}
-                        className={`category-item ${selectedCategory == cat.id ? "active" : ""}`}
-                        onClick={() => setSelectedCategory(cat.id)}
+                        className={`sidebar-item ${selectedCategory === String(cat.id) ? "active" : ""
+                            }`}
+                        onClick={() => setSelectedCategory(String(cat.id))}
                     >
                         {cat.name}
                     </div>
                 ))}
             </aside>
 
-            {/* Product List */}
-            <main className="product-list">
-                <h2 className="list-title">
+            {/* =================== MAIN =================== */}
+            <main className="showcase-main">
+                <h2 className="main-title">
                     {selectedCategory === "all"
                         ? "Tất cả sản phẩm"
-                        : `Sản phẩm thuộc danh mục #${selectedCategory}`}
+                        : ` ${categories.find((c) => String(c.id) === selectedCategory)?.name || ""}`}
                 </h2>
 
-                <div className="product-grid">
+                {/* =================== PRODUCT LIST =================== */}
+                <div className="product-grid-new">
                     {products.map((p) => (
                         <div
                             key={p.id}
-                            className="product-card"
+                            className="product-card-new"
                             onClick={() => navigate(`/Product-Detail/${p.id}`)}
-                            style={{ cursor: "pointer" }}
                         >
-                            <div className="product-img">🛡️</div>
+                            {/* ICON đại diện */}
+                            <div className="product-thumb">🛡️</div>
 
-                            <div className="product-name">{p.name}</div>
+                            {/* INFO */}
+                            <div className="product-info">
+                                <div className="product-title">{p.name}</div>
 
-                            <div className="product-desc">
-                                {p.description?.slice(0, 80) || "Không có mô tả"}
+                                <div className="product-description">
+                                    {p.description?.length > 80
+                                        ? p.description.slice(0, 80) + "..."
+                                        : p.description || "Không có mô tả"}
+                                </div>
                             </div>
 
-                            <button className="btn-row">
-                                Xem chi tiết
-                            </button>
+                            <button className="btn-detail">Xem chi tiết</button>
                         </div>
                     ))}
                 </div>
 
                 {products.length === 0 && (
-                    <p className="empty">Không có sản phẩm trong danh mục này.</p>
+                    <p className="empty-text">Không có sản phẩm trong danh mục này.</p>
                 )}
             </main>
-
         </div>
     );
 }

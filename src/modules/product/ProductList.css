@@ -1,267 +1,122 @@
-/* ======= Layout chính ======= */
-.product-container {
+/* ===== WRAPPER ===== */
+.showcase-wrapper {
     display: flex;
-    gap: 40px;
-    padding: 40px 60px;
-    max-width: 1350px;
-    margin: 0 auto;
-    font-family: "Inter", sans-serif;
+    gap: 24px;
+    padding: 50px 100px;
+    background: #f5f7fb;
+    min-height: fit-content;
+    box-sizing: border-box;
 }
 
-
-/* ======= Sidebar ======= */
-.filter-box {
-    width: 230px;
-    background: #fff;
-    padding: 24px;
+/* ===== SIDEBAR ===== */
+.showcase-sidebar {
+    width: 250px;
+    background: #ffffff;
+    padding: 20px;
     border-radius: 14px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    position: sticky;
-    top: 100px;
-    height: fit-content;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
 }
 
-.filter-title {
+.sidebar-title {
     font-size: 20px;
     font-weight: 700;
-    margin-bottom: 16px;
-    color: #1e293b;
-}
-
-.category-item {
-    padding: 12px 14px;
-    font-size: 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-bottom: 8px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    transition: 0.25s;
-}
-
-.category-item:hover {
-    background: #e0f2fe;
-    border-color: #3b82f6;
-}
-
-.category-item.active {
-    background: #2563eb;
-    color: white;
-    border-color: #1e40af;
-}
-
-
-/* GRID 3 CỘT */
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 28px;
-}
-
-/* CARD MỚI — NHỎ GỌN & SANG */
-.product-card {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 16px;
-    border: 1px solid #e3e8ef;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: 0.25s;
-    cursor: pointer;
-}
-
-.product-card:hover {
-    border-color: #2563eb;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-    transform: translateY(-3px);
-}
-
-/* Ảnh placeholder – tỷ lệ 16:9 */
-.product-img {
-    width: 100%;
-    height: 120px;
-    background: linear-gradient(135deg, #edf2f7, #e2e8f0);
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 32px;
     margin-bottom: 14px;
-    opacity: 0.5;
 }
 
-/* Tên sản phẩm */
-.product-name {
-    font-size: 17px;
-    font-weight: 600;
-    margin-bottom: 4px;
-    color: #1e293b;
-}
-
-/* Mô tả */
-.product-desc {
-    font-size: 14px;
-    color: #64748b;
-    line-height: 1.35;
-    height: 38px;
-    overflow: hidden;
-    margin-bottom: 12px;
-}
-
-/* Button */
-.btn-row {
-    padding: 8px 14px;
-    background: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
+.sidebar-item {
+    padding: 12px 14px;
+    border-radius: 20px;
+    font-size: 15px;
     cursor: pointer;
-    transition: 0.2s;
-}
-
-.btn-row:hover {
-    background: #1e40af;
-}
-
-/* ====================== */
-/* JSON TABLE */
-/* ====================== */
-.json-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #fafafa;
-    margin-top: 6px;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid #e3e3e3;
-}
-
-.json-table td {
-    padding: 10px 14px;
-    border-bottom: 1px solid #eee;
-}
-
-.json-key {
-    width: 35%;
-    font-weight: 600;
-    color: #444;
-    background: #f5f5f5;
-}
-
-.json-value {
+    transition: 0.25s;
     color: #333;
 }
 
-.json-table tr:last-child td {
-    border-bottom: none;
+.sidebar-item:hover {
+    background: #e8f0ff;
 }
 
-/* ====================== */
-/* ADDON CARD */
-/* ====================== */
+.sidebar-item.active {
+    background: #3e7bfa;
+    color: white;
+    font-weight: 600;
+}
 
-.addon-card {
+/* ===== MAIN CONTENT ===== */
+.showcase-main {
+    flex: 1;
+}
+
+.main-title {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* ===== PRODUCT GRID ===== */
+.product-grid-new {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 22px;
+}
+
+/* ===== CARD ===== */
+.product-card-new {
+    background: #fff;
     padding: 18px;
-    margin-bottom: 16px;
-    background: #ffffff;
-    border-radius: 10px;
-    border: 1px solid #e4e4e4;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     cursor: pointer;
     transition: 0.25s ease;
-}
-
-.addon-card:hover {
-    border-color: #1976d2;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-}
-
-/* Khi được chọn */
-.addon-card.selected {
-    border-color: #1976d2;
-    background: #f0f7ff;
-    box-shadow: 0 4px 14px rgba(25, 118, 210, 0.3);
-    transform: scale(1.02);
-}
-
-.addon-header {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.addon-title {
-    font-weight: 700;
+.product-card-new:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+}
+
+/* Image/Icon */
+.product-thumb {
+    font-size: 40px;
+    margin-bottom: 16px;
+}
+
+/* Info */
+.product-title {
     font-size: 18px;
-    color: #222;
-}
-
-.addon-description {
-    margin-top: 6px;
-    color: #555;
-}
-
-.addon-meta {
-    margin: 10px 0;
-}
-
-.addon-price {
-    font-weight: 600;
-    color: #d32f2f;
-    margin-top: 10px;
-    font-size: 15px;
-}
-
-/* ====================== */
-/* SECTION TITLES */
-/* ====================== */
-.info-section h3,
-.bonus-section h3,
-.price-section h3 {
-    margin-bottom: 12px;
-    color: #1a1a1a;
-}
-
-/* TABLE INFO */
-.info-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-}
-
-.info-table td {
-    padding: 10px;
-    border: 1px solid #ddd;
-}
-
-.back-link {
-    display: inline-block;
-    margin-bottom: 15px;
-    color: #1976d2;
-    font-weight: 600;
-}
-
-.price {
-    font-size: 22px;
     font-weight: 700;
-    color: #d32f2f;
+    color: #222;
+    margin-bottom: 6px;
 }
 
-.buy-button {
+.product-description {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+}
+
+/* Button */
+.btn-detail {
     margin-top: 14px;
-    padding: 12px 20px;
-    background: #1976d2;
-    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    background: #3e7bfa;
     color: white;
-    border-radius: 6px;
+    border: none;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 16px;
+    transition: 0.25s;
 }
 
-.buy-button:hover {
-    background: #145ea8;
+.btn-detail:hover {
+    background: #2e63d3;
+}
 
-
+.empty-text {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #777;
 }

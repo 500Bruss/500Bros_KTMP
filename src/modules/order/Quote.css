@@ -31,15 +31,64 @@
     color: #d9534f;
 }
 
+/* ===== TABLE STYLE ===== */
 .quote-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.quote-table td {
-    padding: 8px 0;
-    font-size: 15px;
+.quote-table tr td:first-child {
+    font-weight: 600;
+    color: #394566;
+    width: 180px;
+    padding: 10px 0;
 }
+
+.quote-table tr td:last-child {
+    font-weight: 500;
+    color: #1a1a1a;
+    padding: 10px 0;
+}
+
+.quote-table tr+tr td {
+    border-top: 1px solid #eef0f6;
+}
+
+/* ===== BADGE STATUS ===== */
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+/* Các màu trạng thái */
+.status-badge.APPROVED {
+    background: #d8f5d0;
+    color: #207227;
+}
+
+.status-badge.SUBMITTED {
+    background: #e7eaff;
+    color: #3e4acb;
+}
+
+.status-badge.CANCELLED {
+    background: #ffe1e1;
+    color: #b72121;
+}
+
+.info-horizontal-box {
+    background: #ffffff;
+    border: 1px solid #e6e8f2;
+    border-radius: 20px;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+}
+
+
 
 /* JSON BLOCK */
 .json-box {
@@ -56,17 +105,19 @@
 
 .json-row {
     display: flex;
-    justify-content: space-between;
+
     padding: 6px 0;
 }
 
 .json-key {
     font-weight: 600;
+    min-width: 150px;
     color: #003e9a;
 }
 
 .json-value {
     color: #444;
+    font-weight: 300;
 }
 
 /* Addon Display */

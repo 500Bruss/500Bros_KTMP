@@ -1,0 +1,13 @@
+.applications-page .admin-card {
+  background: linear-gradient(180deg, #ffffff, #f9fbff);
+}
+
+.filter-item.wide {
+  grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+  .filter-item.wide {
+    grid-column: span 1;
+  }
+}

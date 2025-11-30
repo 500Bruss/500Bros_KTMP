@@ -1,0 +1,10 @@
+.policies-page .admin-card {
+  background: linear-gradient(180deg, #ffffff, #f9fbff);
+}
+
+.policies-page select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--admin-border);
+  background: #fff;
+}
