@@ -14,29 +14,61 @@ export default function AdminApplications() {
     endDate: "",
   });
 
+  // pagination
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
+
   const load = async () => {
-    const params = {
-      all: true,
-      sort: "createdAt,desc",
-    };
+    const res = await api.get("/api/applications", {
+      params: {
+        all: true,
+        sort: "createdAt,desc",
+      },
+    });
 
-    if (filters.status !== "ALL") params.status = filters.status;
-    if (filters.search.trim() !== "") params.search = filters.search;
-    if (filters.startDate) params.startDate = filters.startDate;
-    if (filters.endDate) params.endDate = filters.endDate;
+    const items = res.data.data.items || [];
+    const mapped = items.map((a) => ({
+      ...a,
+      status: a.status || "SUBMITTED",
+    }));
 
-    const res = await api.get("/api/applications", { params });
-    setItems(res.data.data.items || []);
+    setItems(mapped);
   };
 
   useEffect(() => {
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const applyFilter = () => {
-    load();
-  };
+  // =====================
+  // FILTERING
+  // =====================
+  const filtered = items.filter((a) => {
+    const matchStatus =
+      filters.status === "ALL" || a.status === filters.status;
+
+    const matchSearch =
+      !filters.search ||
+      a.userName?.toLowerCase().includes(filters.search.toLowerCase()) ||
+      a.productName?.toLowerCase().includes(filters.search.toLowerCase());
+
+    const created = a.createdAt ? new Date(a.createdAt) : null;
+    const fromOk =
+      !filters.startDate || (created && created >= new Date(filters.startDate));
+    const toOk =
+      !filters.endDate || (created && created <= new Date(filters.endDate));
+
+    return matchStatus && matchSearch && fromOk && toOk;
+  });
+
+  // =====================
+  // PAGINATION LOGIC
+  // =====================
+  const totalPages = Math.ceil(filtered.length / pageSize);
+
+  const paginated = filtered.slice(
+    (page - 1) * pageSize,
+    page * pageSize
+  );
 
   const updateStatus = async (id, status) => {
     try {
@@ -64,7 +96,9 @@ export default function AdminApplications() {
                 className="filter-input"
                 placeholder="Tìm theo user hoặc sản phẩm..."
                 value={filters.search}
-                onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, search: e.target.value })
+                }
               />
             </div>
 
@@ -73,7 +107,9 @@ export default function AdminApplications() {
               <select
                 className="filter-select"
                 value={filters.status}
-                onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, status: e.target.value })
+                }
               >
                 {STATUSES.map((s) => (
                   <option key={s} value={s}>
@@ -88,7 +124,9 @@ export default function AdminApplications() {
               <input
                 type="date"
                 value={filters.startDate}
-                onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, startDate: e.target.value })
+                }
               />
             </div>
 
@@ -97,16 +135,15 @@ export default function AdminApplications() {
               <input
                 type="date"
                 value={filters.endDate}
-                onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, endDate: e.target.value })
+                }
               />
             </div>
-
-            <button className="primary-btn" onClick={applyFilter}>
-              Lọc
-            </button>
           </div>
         </div>
 
+        {/* TABLE */}
         <div className="admin-card">
           <table className="data-table">
             <thead>
@@ -120,35 +157,38 @@ export default function AdminApplications() {
                 <th>Hành động</th>
               </tr>
             </thead>
+
             <tbody>
-              {items.length === 0 && (
+              {paginated.length === 0 && (
                 <tr>
-                  <td colSpan="7" style={{ textAlign: "center", padding: "20px" }}>
+                  <td colSpan="7" style={{ textAlign: "center", padding: 20 }}>
                     Không có dữ liệu
                   </td>
                 </tr>
               )}
 
-              {items.map((a) => (
+              {paginated.map((a) => (
                 <tr key={a.id}>
                   <td>{a.id}</td>
                   <td>{a.userName}</td>
                   <td>{a.productName}</td>
                   <td>{a.totalPremium?.toLocaleString()}</td>
+
                   <td>
                     <span
-                      className={`status-chip ${
-                        a.status === "APPROVED"
-                          ? "success"
-                          : a.status === "SUBMITTED"
+                      className={`status-chip ${a.status === "APPROVED"
+                        ? "success"
+                        : a.status === "SUBMITTED"
                           ? "warning"
                           : "danger"
-                      }`}
+                        }`}
                     >
                       {a.status}
                     </span>
                   </td>
+
                   <td>{a.createdAt}</td>
+
                   <td>
                     <select
                       value={a.status}
@@ -165,6 +205,36 @@ export default function AdminApplications() {
               ))}
             </tbody>
           </table>
+
+          {/* PAGINATION UI */}
+          <div className="pagination-bar">
+            <button
+              disabled={page === 1}
+              onClick={() => setPage((p) => p - 1)}
+            >
+              ←
+            </button>
+
+            {[...Array(totalPages)].map((_, i) => {
+              const pageNumber = i + 1;
+              return (
+                <button
+                  key={pageNumber}
+                  className={page === pageNumber ? "active" : ""}
+                  onClick={() => setPage(pageNumber)}
+                >
+                  {pageNumber}
+                </button>
+              );
+            })}
+
+            <button
+              disabled={page === totalPages}
+              onClick={() => setPage((p) => p + 1)}
+            >
+              →
+            </button>
+          </div>
         </div>
       </div>
     </AdminLayout>

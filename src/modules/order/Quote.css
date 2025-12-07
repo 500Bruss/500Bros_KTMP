@@ -162,3 +162,40 @@
 .confirm-btn:hover {
     background: #0055cc;
 }
+
+.addon-selected-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.addon-selected-item {
+    padding: 14px;
+    border-radius: 8px;
+    background: #f7faff;
+    border: 1px solid #d8e6ff;
+}
+
+.addon-title-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    margin-bottom: 6px;
+}
+
+.addon-desc {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.addon-meta-box {
+    padding-left: 10px;
+    border-left: 3px solid #aac3ff;
+}
+
+.meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+}

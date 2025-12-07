@@ -42,8 +42,6 @@ export default function PaymentPage() {
     try {
       const res = await paymentApi.create(application.id, "VNPAY");
 
-
-
       const url = res.data?.data?.paymentUrl;
       if (!url) throw new Error("Không nhận được link thanh toán");
       localStorage.setItem("last_payment_application", application.id);

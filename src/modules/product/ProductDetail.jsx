@@ -21,6 +21,7 @@ const fieldNameMap = {
   deductible: "Mức khấu trừ",
   premiumRate: "Tỷ lệ phí bảo hiểm",
   addonType: "Loại điều kiện",
+  coverType: "Loại điều kiện",
 };
 
 /* Auto format key nếu không có trong map */
@@ -43,6 +44,7 @@ export default function ProductDetail() {
   const [addons, setAddons] = useState([]);
   const [selectedAddons, setSelectedAddons] = useState([]);
 
+  /* ================= LOAD PRODUCT DETAIL ================= */
   useEffect(() => {
     api
       .get(`/api/products/${id}`)
@@ -50,12 +52,15 @@ export default function ProductDetail() {
         const p = res.data.data;
         if (!p) return;
 
+        // Parse baseCover + metadata
         p.baseCoverParsed =
           typeof p.baseCover === "string" ? JSON.parse(p.baseCover) : p.baseCover;
 
         const metaRaw = p.metaData ?? p.metadata;
-        p.metadataParsed = typeof metaRaw === "string" ? JSON.parse(metaRaw) : metaRaw;
+        p.metadataParsed =
+          typeof metaRaw === "string" ? JSON.parse(metaRaw) : metaRaw;
 
+        // Parse addon list
         const addonArr = (p.addonsList || []).map((a) => ({
           ...a,
           metaParsed:
@@ -70,23 +75,27 @@ export default function ProductDetail() {
 
   if (!product) return <p className="loading-text-new">Đang tải...</p>;
 
-  /* ===== toggle addon: click chọn → click lại bỏ ===== */
+  /* ============ CHỌN / BỎ CHỌN ADDON ============ */
   const toggleAddon = (addonId) => {
     setSelectedAddons((prev) =>
-      prev.includes(addonId) ? [] : [addonId]
+      prev.includes(addonId)
+        ? prev.filter((x) => x !== addonId)
+        : [...prev, addonId]
     );
   };
 
+  /* ============ CHUYỂN SANG /quote ============ */
   const handleContinueQuote = () => {
     const payload = {
-      product,
-      addons: addons.filter((a) => selectedAddons.includes(a.id)),
+      productId: product.id,
+      selectedAddons: selectedAddons,
     };
 
     localStorage.setItem("quoteData", JSON.stringify(payload));
     navigate("/quote");
   };
 
+  /* ============ TÍNH GIÁ TỔNG ============ */
   const totalPrice =
     product.price +
     addons
@@ -95,7 +104,6 @@ export default function ProductDetail() {
 
   return (
     <div className="detail-wrapper-new">
-
       <Link to="/" className="back-link-new">
         ← Quay lại danh sách
       </Link>
@@ -104,10 +112,7 @@ export default function ProductDetail() {
       <section className="section-box-new">
         <h3 className="section-title-new">Thông tin sản phẩm</h3>
 
-        {/* ===== SIMPLE & CLEAN INFO BOX ===== */}
-        {/* THÔNG TIN SẢN PHẨM — DẠNG DÒNG NGANG */}
         <div className="info-horizontal-box">
-
           <div className="info-line">
             <span className="info-line-label">Mã sản phẩm:</span>
             <span className="info-line-value">{product.id}</span>
@@ -129,11 +134,10 @@ export default function ProductDetail() {
               {product.price.toLocaleString()} VND
             </span>
           </div>
-
         </div>
 
+        {/* ===== Quyền lợi cơ bản ===== */}
         <div className="info-horizontal-box">
-          {/* ===== QUYỀN LỢI CƠ BẢN ===== */}
           <div className="pretty-row">Quyền lợi cơ bản</div>
           <div className="json-card-grid">
             {Object.entries(product.baseCoverParsed || {}).map(([key, val]) => (
@@ -144,14 +148,15 @@ export default function ProductDetail() {
             ))}
           </div>
         </div>
+
+        {/* ===== Metadata ===== */}
         <div className="info-horizontal-box">
-          {/* ===== THÔNG TIN BỔ SUNG ===== */}
           <div className="pretty-row">Thông tin bổ sung</div>
           <div className="json-card-grid">
             {Object.entries(product.metadataParsed || {}).map(([key, val]) => (
               <div className="json-chip-card" key={key}>
                 <div className="chip-label">{formatKey(key)}</div>
-                <div className="chip-value">{String(val.toLocaleString())}</div>
+                <div className="chip-value">{String(val)}</div>
               </div>
             ))}
           </div>
@@ -173,7 +178,7 @@ export default function ProductDetail() {
                   onClick={() => toggleAddon(a.id)}
                 >
                   <div className="addon-header-new">
-                    <input type="radio" name="addon" checked={isSelected} readOnly />
+                    <input type="checkbox" checked={isSelected} readOnly />
                     <span>{a.name}</span>
                   </div>
 
@@ -208,7 +213,6 @@ export default function ProductDetail() {
           Tiếp tục báo giá
         </button>
       </section>
-
     </div>
   );
 }

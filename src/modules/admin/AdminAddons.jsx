@@ -31,7 +31,12 @@ export default function AdminAddons() {
       return;
     }
     const res = await api.get(`/api/products/${productId}`);
-    setAddons(res.data.data.addonsList || []);
+    const items = res.data.data.addonsList || [];
+    const mapped = items.map((a) => ({
+      ...a,
+      status: a.status || "ACTIVE",
+    }));
+    setAddons(mapped);
   };
 
   useEffect(() => {
@@ -43,11 +48,16 @@ export default function AdminAddons() {
   }, [selectedProduct]);
 
   const filtered = addons.filter((a) => {
-    const matchStatus = filters.status === "all" || a.status === filters.status;
+    const status = a.status || "ACTIVE";
+
+    const matchStatus =
+      filters.status === "all" || status === filters.status;
+
     const matchSearch =
       !filters.search ||
       a.name?.toLowerCase().includes(filters.search.toLowerCase()) ||
       a.code?.toLowerCase().includes(filters.search.toLowerCase());
+
     return matchStatus && matchSearch;
   });
 
@@ -101,7 +111,10 @@ export default function AdminAddons() {
           <div className="filter-bar">
             <div className="filter-item">
               <label>Chọn sản phẩm</label>
-              <select value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)}>
+              <select
+                value={selectedProduct}
+                onChange={(e) => setSelectedProduct(e.target.value)}
+              >
                 <option value="">-- Chọn sản phẩm --</option>
                 {products.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -110,19 +123,25 @@ export default function AdminAddons() {
                 ))}
               </select>
             </div>
+
             <div className="filter-item">
               <label>Tìm kiếm</label>
               <input
                 placeholder="Tên hoặc code"
                 value={filters.search}
-                onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, search: e.target.value })
+                }
               />
             </div>
+
             <div className="filter-item">
               <label>Trạng thái</label>
               <select
                 value={filters.status}
-                onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, status: e.target.value })
+                }
               >
                 <option value="all">Tất cả</option>
                 <option value="ACTIVE">ACTIVE</option>
@@ -153,12 +172,16 @@ export default function AdminAddons() {
             <textarea
               placeholder="Mô tả"
               value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              onChange={(e) =>
+                setForm({ ...form, description: e.target.value })
+              }
             />
             <textarea
               placeholder="Metadata (JSON)"
               value={form.metaData}
-              onChange={(e) => setForm({ ...form, metaData: e.target.value })}
+              onChange={(e) =>
+                setForm({ ...form, metaData: e.target.value })
+              }
             />
             <button onClick={createAddon}>Thêm addon</button>
           </div>
@@ -184,20 +207,36 @@ export default function AdminAddons() {
                   <td>{a.name}</td>
                   <td>{a.price?.toLocaleString()}</td>
                   <td>
-                    <span className={`status-chip ${a.status === "ACTIVE" ? "success" : "warning"}`}>
+                    <span
+                      className={`status-chip ${a.status === "ACTIVE" ? "success" : "warning"
+                        }`}
+                    >
                       {a.status}
                     </span>
                   </td>
                   <td className="action-cell">
-                    <button className="ghost-btn" onClick={() => updateStatus(a.id, "ACTIVE")}>
+                    <button
+                      className="ghost-btn"
+                      onClick={() => updateStatus(a.id, "ACTIVE")}
+                    >
                       Active
                     </button>
-                    <button className="danger-btn" onClick={() => updateStatus(a.id, "INACTIVE")}>
+                    <button
+                      className="danger-btn"
+                      onClick={() => updateStatus(a.id, "INACTIVE")}
+                    >
                       Inactive
                     </button>
                   </td>
                 </tr>
               ))}
+              {filtered.length === 0 && (
+                <tr>
+                  <td colSpan="6" style={{ textAlign: "center", padding: 16 }}>
+                    Không có dữ liệu
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

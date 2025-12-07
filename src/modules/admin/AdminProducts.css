@@ -36,3 +36,21 @@
   display: flex;
   gap: 8px;
 }
+
+.price-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.price-input {
+  width: 90px;
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.price-sep {
+  font-weight: bold;
+  opacity: 0.5;
+}

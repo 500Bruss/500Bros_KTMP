@@ -27,9 +27,7 @@ export default function Login() {
     <div className="login-container">
       <div className="login-box">
         <div className="login-logo">Meowchick Insurance</div>
-        <div className="login-subtitle">
-          Đăng nhập để quản lý hợp đồng và bồi thường bảo hiểm.
-        </div>
+
 
         <h2 className="login-title">Đăng nhập</h2>
 

@@ -89,21 +89,6 @@
     margin-top: 22px;
 }
 
-/* ===== BUTTON ===== */
-.checkout-btn {
-    width: 100%;
-    margin-top: 20px;
-    padding: 14px 0;
-    font-size: 17px;
-    font-weight: 700;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(45deg, #f4b37f, #49b6ff);
-    color: white;
-    cursor: pointer;
-    transition: 0.25s;
-}
-
 .checkout-btn:hover {
     opacity: 0.9;
 }
@@ -164,10 +149,9 @@
 /* ===== BUTTON ===== */
 .checkout-btn {
     width: 100%;
-    margin-top: 14px;
     padding: 14px 0;
-    border-radius: 10px;
-    background: linear-gradient(45deg, #ff7b00, #ff9500);
+    border-radius: 30px;
+    background: linear-gradient(45deg, #ba85ff, #b4cafc);
     color: white;
     font-size: 17px;
     font-weight: 700;

@@ -11,3 +11,62 @@
     grid-column: span 1;
   }
 }
+
+/* ===== PAGINATION BAR ===== */
+.pagination-bar {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Nút pagination chung */
+.pagination-bar button {
+  padding: 8px 14px;
+  min-width: 38px;
+  border-radius: 25px;
+
+  border: 1px solid #dce1e7;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+/* Hover: hiệu ứng mượt */
+.pagination-bar button:hover {
+  background: #f1f5f9;
+  border-color: #c3cad3;
+}
+
+/* Active page */
+.pagination-bar button.active {
+  background: #4a80ff;
+  border-color: #4a80ff;
+  color: white;
+  font-weight: 600;
+  transform: scale(1.08);
+
+  box-shadow: 0 2px 6px rgba(74, 128, 255, 0.35);
+}
+
+/* Disabled button */
+.pagination-bar button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: #f5f5f5;
+}
+
+.pagination-bar button:first-child,
+.pagination-bar button:last-child {
+  background: #eef2ff;
+  border-color: #d0d7ff;
+  color: #3a4dbf;
+}
+
+.pagination-bar button:first-child:hover,
+.pagination-bar button:last-child:hover {
+  background: #dce3ff;
+}

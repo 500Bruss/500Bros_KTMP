@@ -18,7 +18,12 @@ export default function AdminPolicies() {
     const res = await api.get("/api/policies", {
       params: { all: true, sort: "createdAt,desc" },
     });
-    setItems(res.data.data.items || []);
+    const items = res.data.data.items || [];
+    const mapped = items.map((p) => ({
+      ...p,
+      status: p.status || "ACTIVE",
+    }));
+    setItems(mapped);
   };
 
   useEffect(() => {
@@ -26,7 +31,9 @@ export default function AdminPolicies() {
   }, []);
 
   const filtered = items.filter((p) => {
-    const matchStatus = filters.status === "ALL" || p.status === filters.status;
+    const matchStatus =
+      filters.status === "ALL" || p.status === filters.status;
+
     const matchSearch =
       !filters.search ||
       p.policyNumber?.toLowerCase().includes(filters.search.toLowerCase()) ||
@@ -34,8 +41,10 @@ export default function AdminPolicies() {
       p.productName?.toLowerCase().includes(filters.search.toLowerCase());
 
     const start = p.startDate ? new Date(p.startDate) : null;
-    const fromOk = !filters.dateFrom || (start && start >= new Date(filters.dateFrom));
-    const toOk = !filters.dateTo || (start && start <= new Date(filters.dateTo));
+    const fromOk =
+      !filters.dateFrom || (start && start >= new Date(filters.dateFrom));
+    const toOk =
+      !filters.dateTo || (start && start <= new Date(filters.dateTo));
 
     return matchStatus && matchSearch && fromOk && toOk;
   });
@@ -65,14 +74,19 @@ export default function AdminPolicies() {
               <input
                 placeholder="Policy/user/sản phẩm"
                 value={filters.search}
-                onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, search: e.target.value })
+                }
               />
             </div>
+
             <div className="filter-item">
               <label>Trạng thái</label>
               <select
                 value={filters.status}
-                onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, status: e.target.value })
+                }
               >
                 {STATUSES.map((s) => (
                   <option key={s} value={s}>
@@ -81,20 +95,26 @@ export default function AdminPolicies() {
                 ))}
               </select>
             </div>
+
             <div className="filter-item">
               <label>Từ ngày</label>
               <input
                 type="date"
                 value={filters.dateFrom}
-                onChange={(e) => setFilters({ ...filters, dateFrom: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, dateFrom: e.target.value })
+                }
               />
             </div>
+
             <div className="filter-item">
               <label>Đến ngày</label>
               <input
                 type="date"
                 value={filters.dateTo}
-                onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, dateTo: e.target.value })
+                }
               />
             </div>
           </div>
@@ -124,13 +144,12 @@ export default function AdminPolicies() {
                   <td>{p.premiumTotal?.toLocaleString()}</td>
                   <td>
                     <span
-                      className={`status-chip ${
-                        p.status === "ACTIVE"
-                          ? "success"
-                          : p.status === "EXPIRED"
+                      className={`status-chip ${p.status === "ACTIVE"
+                        ? "success"
+                        : p.status === "EXPIRED"
                           ? "danger"
                           : "warning"
-                      }`}
+                        }`}
                     >
                       {p.status}
                     </span>
@@ -139,7 +158,10 @@ export default function AdminPolicies() {
                     {p.startDate} → {p.endDate}
                   </td>
                   <td>
-                    <select value={p.status} onChange={(e) => updateStatus(p.id, e.target.value)}>
+                    <select
+                      value={p.status}
+                      onChange={(e) => updateStatus(p.id, e.target.value)}
+                    >
                       {STATUSES.filter((s) => s !== "ALL").map((s) => (
                         <option key={s} value={s}>
                           {s}
@@ -149,6 +171,13 @@ export default function AdminPolicies() {
                   </td>
                 </tr>
               ))}
+              {filtered.length === 0 && (
+                <tr>
+                  <td colSpan="8" style={{ textAlign: "center", padding: 16 }}>
+                    Không có dữ liệu
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

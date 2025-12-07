@@ -10,66 +10,85 @@ export default function ProductList() {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("all");
+    const [searchText, setSearchText] = useState("");
 
-    // =======================
+    // Pagination states
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
     // LOAD CATEGORIES
-    // =======================
     const loadCategories = async () => {
         try {
             const res = await api.get("/api/categories", {
                 params: { all: true, sort: "createdAt,desc" },
             });
-
-            const list = res.data.data.items || [];
-
-            // BE trả category như:
-            // { id, code, name, ... }
-            setCategories(list);
+            setCategories(res.data.data.items || []);
         } catch (err) {
-            console.log("Load categories failed", err);
+            console.error(err);
         }
     };
 
-    // =======================
-    // LOAD PRODUCTS
-    // =======================
+    // LOAD PRODUCTS (WITH PAGINATION)
     const loadProducts = async () => {
         try {
+            let res;
+
             if (selectedCategory === "all") {
-                const res = await api.get("/api/products", {
-                    params: { all: true, sort: "createdAt,desc" },
-                });
-                setProducts(res.data.data.items || []);
-                return;
+                res = await productApi.searchAll(searchText, page, 3);
+            } else {
+                res = await productApi.getByCategory(selectedCategory, searchText, page, 4);
             }
 
-            // lấy sản phẩm theo categoryId
-            const res = await productApi.getByCategory(selectedCategory);
-            setProducts(res.data.data.items || []);
+            const data = res.data.data;
+            setProducts(data.items || []);
+            setTotalPages(data.totalPages || 1);
+
         } catch (err) {
-            console.log("Load products failed", err);
+            console.error("Load products failed:", err);
         }
     };
+
+    // Khi đổi danh mục → reset page
+    useEffect(() => {
+        setPage(1);
+        loadProducts();
+    }, [selectedCategory]);
+
+    // Tìm kiếm → reset page
+    useEffect(() => {
+        setPage(1);
+        loadProducts();
+    }, [searchText]);
+
+    // Đổi page
+    useEffect(() => {
+        loadProducts();
+    }, [page]);
 
     useEffect(() => {
         loadCategories();
         loadProducts();
     }, []);
 
-    useEffect(() => {
-        loadProducts();
-    }, [selectedCategory]);
-
     return (
         <div className="showcase-wrapper">
 
-            {/* =================== SIDEBAR =================== */}
+            {/* SIDEBAR */}
             <aside className="showcase-sidebar">
+
+                {/* 🔍 SEARCH BOX */}
+                <input
+                    type="text"
+                    className="sidebar-search"
+                    placeholder=" Tìm sản phẩm..."
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                />
+
                 <h3 className="sidebar-title">Danh mục</h3>
 
                 <div
-                    className={`sidebar-item ${selectedCategory === "all" ? "active" : ""
-                        }`}
+                    className={`sidebar-item ${selectedCategory === "all" ? "active" : ""}`}
                     onClick={() => setSelectedCategory("all")}
                 >
                     Tất cả sản phẩm
@@ -78,24 +97,24 @@ export default function ProductList() {
                 {categories.map((cat) => (
                     <div
                         key={cat.id}
-                        className={`sidebar-item ${selectedCategory === String(cat.id) ? "active" : ""
-                            }`}
+                        className={`sidebar-item ${selectedCategory === String(cat.id) ? "active" : ""}`}
                         onClick={() => setSelectedCategory(String(cat.id))}
                     >
                         {cat.name}
                     </div>
                 ))}
+
             </aside>
 
-            {/* =================== MAIN =================== */}
+            {/* MAIN CONTENT */}
             <main className="showcase-main">
                 <h2 className="main-title">
                     {selectedCategory === "all"
                         ? "Tất cả sản phẩm"
-                        : ` ${categories.find((c) => String(c.id) === selectedCategory)?.name || ""}`}
+                        : categories.find((c) => String(c.id) === selectedCategory)?.name}
                 </h2>
 
-                {/* =================== PRODUCT LIST =================== */}
+                {/* PRODUCT GRID */}
                 <div className="product-grid-new">
                     {products.map((p) => (
                         <div
@@ -103,17 +122,14 @@ export default function ProductList() {
                             className="product-card-new"
                             onClick={() => navigate(`/Product-Detail/${p.id}`)}
                         >
-                            {/* ICON đại diện */}
                             <div className="product-thumb">🛡️</div>
 
-                            {/* INFO */}
                             <div className="product-info">
                                 <div className="product-title">{p.name}</div>
-
                                 <div className="product-description">
                                     {p.description?.length > 80
                                         ? p.description.slice(0, 80) + "..."
-                                        : p.description || "Không có mô tả"}
+                                        : p.description}
                                 </div>
                             </div>
 
@@ -123,8 +139,33 @@ export default function ProductList() {
                 </div>
 
                 {products.length === 0 && (
-                    <p className="empty-text">Không có sản phẩm trong danh mục này.</p>
+                    <p className="empty-text">Không có sản phẩm phù hợp.</p>
                 )}
+
+                {/* PAGINATION */}
+                {/* PAGINATION */}
+                <div className="pagination-wrapper">
+                    <button
+                        className={`pagination-btn ${page === 1 ? "disabled" : ""}`}
+                        disabled={page === 1}
+                        onClick={() => setPage(page - 1)}
+                    >
+                        ◀
+                    </button>
+
+                    <span className="pagination-info">
+                        {page} / {totalPages}
+                    </span>
+
+                    <button
+                        className={`pagination-btn ${page === totalPages ? "disabled" : ""}`}
+                        disabled={page === totalPages}
+                        onClick={() => setPage(page + 1)}
+                    >
+                        ▶
+                    </button>
+                </div>
+
             </main>
         </div>
     );
