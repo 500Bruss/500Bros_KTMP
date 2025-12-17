@@ -1,38 +1,326 @@
+/* --- 1. LAYOUT CHUNG --- */
+.addons-page {
+  font-family: 'Inter', sans-serif;
+  color: #333;
+  padding: 20px;
+}
+
 .addons-page .admin-card {
-  background: linear-gradient(180deg, #ffffff, #f9fbff);
-}
-
-.admin-form {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px;
-}
-
-.admin-form input,
-.admin-form select,
-.admin-form textarea {
-  padding: 12px 14px;
-  border: 1px solid var(--admin-border);
-  border-radius: 10px;
-  background: #fff;
-}
-
-.admin-form textarea {
-  min-height: 90px;
-}
-
-.admin-form button {
-  padding: 12px 16px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: white;
-  border: none;
+  background: white;
   border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  margin-bottom: 24px;
+  border: 1px solid #f0f0f0;
+}
+
+/* --- HEADER & FILTER --- */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.page-title {
+  font-size: 1.5rem;
   font-weight: 700;
+  color: #2c3e50;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.filter-item {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-item label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.filter-item input,
+.filter-item select {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+/* --- BUTTONS --- */
+.primary-btn {
+  background: linear-gradient(135deg, #4e73df, #224abe);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 4px 10px rgba(78, 115, 223, 0.3);
+}
+
+.ghost-btn {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #555;
+}
+
+/* --- TABLE --- */
+.table-card {
+  padding: 0 !important;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid #eee;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 16px;
+  background: #f8f9fc;
+  color: #555;
+  font-weight: 700;
+  border-bottom: 2px solid #eee;
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+/* --- POPUP FORM --- */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(2px);
+}
+
+.popup {
+  background: white;
+  width: 600px;
+  max-width: 95%;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 25px;
+  /* Padding cho toàn popup */
+}
+
+.modal-header {
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #4e73df;
+  font-size: 1.2rem;
+}
+
+.close-btn {
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #999;
+  background: none;
+  border: none;
+}
+
+/* Form inputs */
+.popup label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #444;
+  font-size: 0.9rem;
+  margin-top: 15px;
+  /* Khoảng cách giữa các field */
+}
+
+/* Sửa lỗi input bị tràn: thêm box-sizing */
+.popup input,
+.popup select,
+.popup textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  /* QUAN TRỌNG */
+  font-family: inherit;
+}
+
+.popup input:focus,
+.popup select:focus,
+.popup textarea:focus {
+  border-color: #4e73df;
+  outline: none;
+}
+
+/* --- [PHẦN QUAN TRỌNG] METADATA 2 CỘT (GIỐNG HÌNH) --- */
+.meta-grid-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* Chia đôi cột đều nhau */
+  gap: 15px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.meta-card {
+  background-color: #f8faff;
+  /* Nền xanh nhạt */
+  border: 1px solid #eef2ff;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s;
+}
+
+.meta-card:hover {
+  border-color: #4e73df;
+  background-color: #eef2ff;
+}
+
+.meta-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #3b5998;
+  /* Màu chữ xanh đậm */
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  display: block;
+  /* Đảm bảo label chiếm dòng riêng */
+  margin-top: 0 !important;
+  /* Ghi đè margin-top của label chung */
+}
+
+/* Style riêng cho Select trong Metadata để đẹp hơn */
+.meta-select {
+  background-color: transparent !important;
+  border: none !important;
+  border-bottom: 1px dashed #cbd5e0 !important;
+  /* Gạch chân nét đứt */
+  border-radius: 0 !important;
+  padding: 5px 0 !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  color: #333 !important;
+  width: 100% !important;
+  outline: none !important;
+  cursor: pointer;
+  box-shadow: none !important;
+}
+
+.meta-select:focus {
+  border-bottom: 1px solid #4e73df !important;
+  color: #4e73df;
+}
+
+/* --- FOOTER --- */
+.popup-actions {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Các tiện ích khác */
+.code-badge {
+  background: #f0f2f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-weight: bold;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.desc-cell {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #666;
+}
+
+.status-chip {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.status-chip.success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-chip.warning {
+  background: #fee2e2;
+  color: #991b1b;
 }
 
 .action-cell {
-  display: flex;
-  gap: 8px;
+  text-align: right;
+}
+
+.text-btn {
+  background: none;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 5px;
+  margin-left: 5px;
+}
+
+.edit-btn {
+  color: #3498db;
+}
+
+.toggle-btn {
+  color: #f39c12;
 }

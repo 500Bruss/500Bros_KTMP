@@ -19,25 +19,35 @@ export default function AdminApplications() {
   const pageSize = 10;
 
   const load = async () => {
-    const res = await api.get("/api/applications", {
-      params: {
-        all: true,
-        sort: "createdAt,desc",
-      },
-    });
+    try {
+      const res = await api.get("/api/applications", {
+        params: {
+          all: true,
+          sort: "createdAt,desc",
+        },
+      });
 
-    const items = res.data.data.items || [];
-    const mapped = items.map((a) => ({
-      ...a,
-      status: a.status || "SUBMITTED",
-    }));
+      const items = res.data.data.items || [];
+      const mapped = items.map((a) => ({
+        ...a,
+        status: a.status || "SUBMITTED",
+      }));
 
-    setItems(mapped);
+      setItems(mapped);
+    } catch (error) {
+      console.error("Lỗi load dữ liệu:", error);
+    }
   };
 
   useEffect(() => {
     load();
   }, []);
+
+  // Hàm reset bộ lọc
+  const handleReset = () => {
+    setFilters({ status: "ALL", search: "", startDate: "", endDate: "" });
+    setPage(1);
+  };
 
   // =====================
   // FILTERING
@@ -90,7 +100,8 @@ export default function AdminApplications() {
           </div>
 
           <div className="filter-bar">
-            <div className="filter-item wide">
+            {/* [ĐỔI TÊN CLASS] apps-filter-wide */}
+            <div className="filter-item apps-filter-wide">
               <label>Tìm kiếm</label>
               <input
                 className="filter-input"
@@ -140,6 +151,18 @@ export default function AdminApplications() {
                 }
               />
             </div>
+
+            {/* [ĐỔI TÊN CLASS] apps-reset-box & apps-reset-btn */}
+            <div className="filter-item apps-reset-box">
+              <label>&nbsp;</label>
+              <button
+                className="apps-reset-btn"
+                onClick={handleReset}
+                title="Đặt lại bộ lọc"
+              >
+                ↺
+              </button>
+            </div>
           </div>
         </div>
 
@@ -148,10 +171,10 @@ export default function AdminApplications() {
           <table className="data-table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>User</th>
-                <th>Product</th>
-                <th>Premium</th>
+                <th>Mã tạo</th>
+                <th>Khách hàng</th>
+                <th>Sản phẩm</th>
+                <th>Giá</th>
                 <th>Trạng thái</th>
                 <th>Ngày tạo</th>
                 <th>Hành động</th>
@@ -175,22 +198,25 @@ export default function AdminApplications() {
                   <td>{a.totalPremium?.toLocaleString()}</td>
 
                   <td>
+                    {/* [ĐỔI TÊN CLASS] apps-status-chip */}
                     <span
-                      className={`status-chip ${a.status === "APPROVED"
-                        ? "success"
-                        : a.status === "SUBMITTED"
-                          ? "warning"
-                          : "danger"
+                      className={`apps-status-chip ${a.status === "APPROVED"
+                          ? "approved"
+                          : a.status === "CANCELLED" || a.status === "REJECTED"
+                            ? "cancelled"
+                            : "submitted"
                         }`}
                     >
-                      {a.status}
+                      {a.status === "CANCELLED" ? "REJECTED" : a.status}
                     </span>
                   </td>
 
                   <td>{a.createdAt}</td>
 
                   <td>
+                    {/* [ĐỔI TÊN CLASS] apps-action-select */}
                     <select
+                      className="apps-action-select"
                       value={a.status}
                       onChange={(e) => updateStatus(a.id, e.target.value)}
                     >
@@ -207,8 +233,10 @@ export default function AdminApplications() {
           </table>
 
           {/* PAGINATION UI */}
-          <div className="pagination-bar">
+          {/* [ĐỔI TÊN CLASS] apps-pagination-bar & apps-pagination-btn */}
+          <div className="apps-pagination-bar">
             <button
+              className="apps-pagination-btn"
               disabled={page === 1}
               onClick={() => setPage((p) => p - 1)}
             >
@@ -220,7 +248,7 @@ export default function AdminApplications() {
               return (
                 <button
                   key={pageNumber}
-                  className={page === pageNumber ? "active" : ""}
+                  className={`apps-pagination-btn ${page === pageNumber ? "active" : ""}`}
                   onClick={() => setPage(pageNumber)}
                 >
                   {pageNumber}
@@ -229,6 +257,7 @@ export default function AdminApplications() {
             })}
 
             <button
+              className="apps-pagination-btn"
               disabled={page === totalPages}
               onClick={() => setPage((p) => p + 1)}
             >

@@ -69,6 +69,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("access_token");
     localStorage.removeItem("currentUser");
     setCurrentUser(null);
+    window.location.href = "/login";
   };
 
   if (currentUser === undefined) return null; // wait for init

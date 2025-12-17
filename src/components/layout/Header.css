@@ -1,21 +1,27 @@
+/* Header.css - Final Blue Fixed */
+
 /* ======================= */
-/*  HEADER WRAPPER */
+/* 1. HEADER WRAPPER */
 /* ======================= */
 .header-container {
     width: 100%;
-    max-width: 1820px;
     height: 80px;
     background: #ffffff;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    /* Căn đều 3 phần */
     padding: 0 40px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
     position: sticky;
     top: 0;
     z-index: 9999;
+    /* Luôn nổi trên cùng */
+    box-sizing: border-box;
+    /* Đảm bảo padding không làm vỡ layout */
 }
 
-/* LOGO */
+/* LOGO - Không bao giờ bị co lại */
 .header-left {
     flex: 0 0 auto;
 }
@@ -23,174 +29,346 @@
 .header-logo {
     width: 120px;
     cursor: pointer;
+    display: block;
+    /* Fix lỗi ảnh inline */
 }
 
 /* ======================= */
-/*  MAIN MENU */
+/* 2. MAIN MENU (Ở GIỮA) */
 /* ======================= */
-
 .header-menu {
     flex: 1;
+    /* Chiếm khoảng trống còn lại */
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 32px;
+    height: 100%;
+    min-width: 0;
+    /* Quan trọng: Giúp flex item co lại nếu cần, không đẩy user ra ngoài */
+}
+
+.header-menu button,
+.menu-btn-trigger {
+    background: none;
+    border: none;
+    font-size: 15px;
+    color: #1A73E8;
+    /* Xanh chủ đạo */
+    font-weight: 600;
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+    white-space: nowrap;
+    /* Không xuống dòng chữ menu */
+}
+
+.header-menu button:hover,
+.menu-btn-trigger:hover {
+    color: #0B57D0;
+    /* Xanh đậm hơn */
+}
+
+/* ======================= */
+/* 3. MEGA MENU (RỘNG & ĐẸP) */
+/* ======================= */
+.ins-menu-group {
+    position: relative;
+    height: 100%;
+    display: flex;
     align-items: center;
 }
 
-.header-menu button {
-    background: none;
-    border: none;
-    font-size: 15px;
-    color: #1A73E8;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.header-menu button:hover {
-    color: #0B57D0;
-}
-
-
-/* ======================= */
-/* MEGA MENU (CUSTOM PREFIX: ins-) */
-/* ======================= */
-
-.ins-menu-group {
-    position: relative;
-}
-
-.ins-menu-group>button {
-    background: none;
-    border: none;
-    color: #1A73E8;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.ins-menu-group:hover>button {
-    color: #0B57D0;
-}
-
-/* MEGA MENU DROPDOWN WRAPPER */
+/* Khung chứa Mega Menu */
 .ins-mega-menu {
     position: absolute;
-    top: 50px;
-    left: 0;
-    width: 850px;
+    top: 80px;
+    /* Bằng chiều cao header */
+    left: 50%;
+    transform: translateX(-50%);
+    /* Căn giữa tuyệt đối */
+
+    width: 1000px;
+    /* Độ rộng cố định */
+    max-width: 90vw;
+    /* Không vượt quá màn hình nếu màn hình nhỏ */
     background: white;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
-    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    border-radius: 0 0 12px 12px;
     display: flex;
+    padding: 30px;
+    gap: 0;
+    min-height: 300px;
+    border-top: 3px solid #1A73E8;
+
+    /* Quan trọng để đè lên các phần tử khác bên dưới header */
     z-index: 2000;
-    padding: 20px;
-    gap: 20px;
-    min-height: 260px;
+    animation: slideDown 0.2s ease-out;
 }
 
-/* LEFT CATEGORY COLUMN */
-.ins-mega-left {
-    width: 28%;
-    border-right: 1px solid #e6e6e6;
-    padding-right: 10px;
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
 }
 
-.ins-mega-cat {
-    padding: 12px;
-    margin-bottom: 5px;
-    cursor: pointer;
-    border-radius: 6px;
-    font-weight: 500;
-    transition: 0.2s;
-}
-
-.ins-mega-cat:hover,
-.ins-mega-cat.active {
-    background: #f2f6ff;
-    color: #0056c1;
-}
-
-/* RIGHT PRODUCT LIST */
-.ins-mega-right {
-    width: 72%;
+/* Layout Cột */
+.mega-menu-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    /* 3 cột đều */
+    width: 100%;
+    gap: 30px;
 }
 
-.ins-mega-product {
-    display: flex;
-    flex-direction: column;
-    background: #fafafa;
-    padding: 12px;
-    border-radius: 8px;
+.mega-column {
+    border-right: 1px solid #f0f0f0;
+    padding-right: 20px;
+}
+
+.mega-column:last-child {
+    border-right: none;
+}
+
+/* Tiêu đề danh mục */
+.mega-cat-title {
+    font-size: 1.1rem;
+    color: #1A73E8;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #E8F0FE;
+}
+
+/* Danh sách sản phẩm */
+.mega-prod-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mega-prod-list li {
+    padding: 8px 10px;
+    font-size: 0.95rem;
+    color: #555;
     cursor: pointer;
-    transition: 0.15s ease;
-    border: 1px solid #eee;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 6px;
 }
 
-.ins-mega-product:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.mega-prod-list li:hover {
+    background-color: #E8F0FE;
+    /* Hover màu xanh nhạt */
+    color: #174ea6;
+    padding-left: 15px;
 }
 
-.ins-mega-info h4 {
-    margin: 8px 0 4px 0;
-    font-size: 15px;
-    font-weight: 600;
-}
-
-.ins-mega-info p {
-    font-size: 13px;
-    color: #777;
-}
-
-/* EMPTY CASE */
-.ins-mega-empty {
+.empty-prod {
     font-style: italic;
-    color: #666;
-    padding: 10px;
+    color: #999;
+    font-size: 0.9rem;
+    padding-left: 10px;
 }
 
+.ins-mega-empty {
+    width: 100%;
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    padding-top: 50px;
+}
 
 /* ======================= */
-/* USER SECTION */
+/* 4. USER SECTION (FIX LỖI MẤT HIỂN THỊ) */
 /* ======================= */
+.header-user {
+    flex: 0 0 auto;
+    /* QUAN TRỌNG: Không co lại */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+    z-index: 1001;
+    /* Đảm bảo nổi trên các layer khác */
+}
 
+/* Khu vực Avatar + Tên */
+.user-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #1A73E8;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 30px;
+    transition: 0.2s;
+    white-space: nowrap;
+    /* Tên user không bị xuống dòng */
+}
+
+.user-area:hover {
+    background: #f1f3f4;
+}
+
+/* Dropdown Menu User */
+.ins-user-dropdown {
+    position: absolute;
+    top: 60px;
+    /* Cách mép trên header một chút */
+    right: 0;
+    background: white;
+    width: 220px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 10px 0;
+    z-index: 3000;
+    border: 1px solid #eee;
+    animation: fadeIn 0.2s;
+}
+
+.ins-user-dropdown button {
+    width: 100%;
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    text-align: left;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+    display: block;
+    /* Đảm bảo chiếm hết dòng */
+}
+
+.ins-user-dropdown button:hover {
+    background: #f5f5f5;
+    color: #1A73E8;
+}
+
+/* Nút Đăng nhập */
+.login-btn {
+    padding: 10px 24px;
+    background: #1A73E8;
+    color: white;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.2s;
+    white-space: nowrap;
+    /* Không xuống dòng chữ Đăng nhập */
+    display: inline-block;
+}
+
+.login-btn:hover {
+    background: #174ea6;
+    box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
+}
+
+/* Utility */
+.divider {
+    height: 1px;
+    background: #eee;
+    margin: 5px 0;
+}
+
+.logout-btn {
+    color: #d93025 !important;
+}
+
+.logout-btn:hover {
+    background: #fee !important;
+}
+
+/* ======================= */
+/* 4. USER SECTION (FIX LỖI HOVER) */
+/* ======================= */
 .header-user {
     flex: 0 0 auto;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     position: relative;
+    z-index: 1002;
+    min-width: 140px;
+    height: 100%;
+    /* Full chiều cao để dễ hover */
 }
 
-/* USER AREA (avatar + name) */
 .user-area {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     cursor: pointer;
-    color: #1A73E8;
-    font-weight: 600;
-    padding: 6px 10px;
-    border-radius: 8px;
+    color: #444746;
+    /* Màu xám dịu */
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 20px;
+    transition: 0.2s;
+    background-color: transparent;
+    border: 1px solid transparent;
+
+    /* [QUAN TRỌNG] Để neo dropdown và không bị mất hover */
+    position: relative;
+    height: 40px;
+    /* Chiều cao cố định để dễ căn chỉnh */
 }
 
 .user-area:hover {
-    background: #f3f8ff;
+    background-color: #F8F9FA;
+    border-color: #e0e0e0;
+    color: #1A73E8;
 }
 
-/* DROPDOWN */
+.user-name {
+    font-size: 14px;
+    white-space: nowrap;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Dropdown */
 .ins-user-dropdown {
     position: absolute;
     right: 0;
-    top: 50px;
+    /* [QUAN TRỌNG] top: 100% + margin-top giúp nó nằm ngay dưới, không phụ thuộc chiều cao header */
+    top: 100%;
+    margin-top: 5px;
+
     background: #fff;
-    padding: 10px 0;
-    border-radius: 10px;
-    min-width: 170px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    padding: 6px 0;
+    border-radius: 8px;
+    min-width: 180px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     z-index: 3000;
+    border: 1px solid #f0f0f0;
+    animation: fadeIn 0.2s;
+}
+
+/* [FIX LỖI MẤT HOVER] Tạo lớp đệm vô hình lấp khoảng trống */
+.ins-user-dropdown::before {
+    content: "";
+    position: absolute;
+    top: -15px;
+    /* Phủ lên khoảng hở phía trên */
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: transparent;
+    /* Trong suốt */
 }
 
 .ins-user-dropdown button {
@@ -199,28 +377,59 @@
     background: none;
     border: none;
     text-align: left;
-    color: #1A73E8;
+    color: #58b4f0;
     cursor: pointer;
     font-size: 14px;
-    transition: 0.2s;
+    display: block;
 }
 
 .ins-user-dropdown button:hover {
-    background: #F0F6FF;
-    color: #0B57D0;
+    background: #F0F7FF;
+    color: #1A73E8;
 }
 
-/* LOGIN BTN */
+/* Nút Đăng nhập: Nhỏ & Dịu */
 .login-btn {
-    padding: 8px 18px;
+    padding: 8px 20px;
     background: #1A73E8;
     color: white;
-    border-radius: 999px;
+    border-radius: 20px;
     text-decoration: none;
     font-weight: 600;
+    font-size: 14px;
     transition: 0.2s;
+    white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(26, 115, 232, 0.2);
 }
 
 .login-btn:hover {
-    background: #0B57D0;
+    background: #185abc;
+    box-shadow: 0 4px 8px rgba(26, 115, 232, 0.3);
+    transform: translateY(-1px);
+}
+
+.divider {
+    height: 1px;
+    background: #f1f3f4;
+    margin: 4px 0;
+}
+
+.logout-btn {
+    color: #d93025 !important;
+}
+
+.logout-btn:hover {
+    background: #fff5f5 !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

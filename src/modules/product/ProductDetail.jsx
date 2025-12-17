@@ -61,11 +61,13 @@ export default function ProductDetail() {
           typeof metaRaw === "string" ? JSON.parse(metaRaw) : metaRaw;
 
         // Parse addon list
-        const addonArr = (p.addonsList || []).map((a) => ({
-          ...a,
-          metaParsed:
-            typeof a.metaData === "string" ? JSON.parse(a.metaData) : a.metaData,
-        }));
+        const addonArr = (p.addonsList || [])
+          .filter(a => a.status === "ACTIVE")
+          .map((a) => ({
+            ...a,
+            metaParsed:
+              typeof a.metaData === "string" ? JSON.parse(a.metaData) : a.metaData,
+          }));
 
         setProduct(p);
         setAddons(addonArr);

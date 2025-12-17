@@ -3,16 +3,15 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
-
 import LoginPage from "./modules/auth/page/Login";
 import Register from "./modules/auth/page/Register";
+
 import Quote from "./modules/order/Quote";
 import ApplicationDetail from "./modules/order/ApplicationDetail";
 import ApplicationForm from "./modules/order/ApplicationForm";
-
 import ProductList from "./modules/product/ProductList";
 import ProductDetail from "./modules/product/ProductDetail";
-
+import ClaimHistory from "./modules/claim/ClaimHistory";
 import PaymentPage from "./modules/payment/PaymentPage";
 import PaymentResult from "./modules/payment/PaymentResult";
 import SellerOrders from "./modules/order/SellerOrders";
@@ -26,6 +25,7 @@ import AdminProducts from "./modules/admin/AdminProducts";
 import AdminAddons from "./modules/admin/AdminAddons";
 import AdminApplications from "./modules/admin/AdminApplications";
 import AdminPolicies from "./modules/admin/AdminPolicies";
+import AdminClaims from "./modules/admin/AdminClaims";
 
 import { useAuth } from "./modules/auth/hook/useAuth";
 
@@ -128,7 +128,7 @@ function App() {
             path="/Product-Detail/:id"
             element={<ProductDetail onAdd={handleAdd} />}
           />
-
+          <Route path="/claim-history" element={<ClaimHistory />} />
           <Route path="/ApplicationForm" element={<ApplicationForm />} />
           <Route path="/application/:id" element={<ApplicationDetail />} />
           <Route path="/payment/:applicationId" element={<PaymentPage />} />
@@ -188,6 +188,15 @@ function App() {
             element={
               <RequireAdmin>
                 <AdminPolicies />
+              </RequireAdmin>
+            }
+          />
+
+          <Route
+            path="/admin/claims"
+            element={
+              <RequireAdmin>
+                <AdminClaims />
               </RequireAdmin>
             }
           />

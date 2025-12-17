@@ -50,7 +50,7 @@ api.interceptors.response.use(
       } catch (err) {
         localStorage.removeItem("access_token");
         localStorage.removeItem("currentUser");
-        window.location.href = "/login";
+
       }
     }
 

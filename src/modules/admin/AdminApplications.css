@@ -1,19 +1,21 @@
+/* Background riêng cho trang này */
 .applications-page .admin-card {
   background: linear-gradient(180deg, #ffffff, #f9fbff);
 }
 
-.filter-item.wide {
+/* Custom grid cho ô search rộng */
+.apps-filter-wide {
   grid-column: span 2;
 }
 
 @media (max-width: 768px) {
-  .filter-item.wide {
+  .apps-filter-wide {
     grid-column: span 1;
   }
 }
 
-/* ===== PAGINATION BAR ===== */
-.pagination-bar {
+/* ===== [ĐÃ ĐỔI TÊN] PAGINATION BAR ===== */
+.apps-pagination-bar {
   margin-top: 20px;
   display: flex;
   justify-content: center;
@@ -21,12 +23,11 @@
   flex-wrap: wrap;
 }
 
-/* Nút pagination chung */
-.pagination-bar button {
+/* Class riêng cho nút phân trang của trang Apps */
+.apps-pagination-btn {
   padding: 8px 14px;
   min-width: 38px;
   border-radius: 25px;
-
   border: 1px solid #dce1e7;
   background: #fff;
   cursor: pointer;
@@ -35,38 +36,127 @@
   transition: all 0.2s ease;
 }
 
-/* Hover: hiệu ứng mượt */
-.pagination-bar button:hover {
+/* Hover */
+.apps-pagination-btn:hover {
   background: #f1f5f9;
   border-color: #c3cad3;
 }
 
 /* Active page */
-.pagination-bar button.active {
+.apps-pagination-btn.active {
   background: #4a80ff;
   border-color: #4a80ff;
   color: white;
   font-weight: 600;
   transform: scale(1.08);
-
   box-shadow: 0 2px 6px rgba(74, 128, 255, 0.35);
 }
 
 /* Disabled button */
-.pagination-bar button:disabled {
+.apps-pagination-btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
   background: #f5f5f5;
 }
 
-.pagination-bar button:first-child,
-.pagination-bar button:last-child {
+/* Nút đầu và cuối (Previous/Next) */
+.apps-pagination-btn:first-child,
+.apps-pagination-btn:last-child {
   background: #eef2ff;
   border-color: #d0d7ff;
   color: #3a4dbf;
 }
 
-.pagination-bar button:first-child:hover,
-.pagination-bar button:last-child:hover {
+.apps-pagination-btn:first-child:hover,
+.apps-pagination-btn:last-child:hover {
   background: #dce3ff;
+}
+
+/* ===== [ĐÃ ĐỔI TÊN] RESET BUTTON ===== */
+.apps-reset-box {
+  flex: 0 0 auto;
+  min-width: 40px !important;
+}
+
+.apps-reset-btn {
+  height: 42px;
+  width: 42px;
+  border: 1px solid #ced4da;
+  background-color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.apps-reset-btn:hover {
+  background-color: #f8f9fa;
+  color: #e74a3b;
+  /* Màu đỏ khi hover */
+  border-color: #e74a3b;
+  transform: rotate(180deg);
+}
+
+/* ===== [ĐÃ ĐỔI TÊN] SELECT TRONG TABLE ===== */
+.apps-action-select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #d1d3e2;
+  background-color: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #444;
+  outline: none;
+  min-width: 130px;
+}
+
+.apps-action-select:hover {
+  background-color: #fcfcfc;
+  border-color: #4e73df;
+}
+
+/* ===== [ĐÃ ĐỔI TÊN] STATUS CHIPS ===== */
+.apps-status-chip {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  min-width: 100px;
+  text-align: center;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+/* Các trạng thái con */
+.apps-status-chip.submitted {
+  background-color: #fff8dd;
+  /* Vàng nhạt */
+  color: #f6c000;
+  /* Vàng đậm */
+}
+
+.apps-status-chip.approved {
+  background-color: #e8fff3;
+  /* Xanh nhạt */
+  color: #50cd89;
+  /* Xanh đậm */
+}
+
+.apps-status-chip.cancelled {
+  background-color: #fff5f8;
+  /* Hồng nhạt */
+  color: #f1416c;
+  /* Đỏ đậm */
+}
+
+.apps-status-chip:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }

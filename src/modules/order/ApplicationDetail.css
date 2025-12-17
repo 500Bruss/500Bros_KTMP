@@ -1,86 +1,175 @@
+/* Container chung */
 .detail-container {
-    max-width: 750px;
-    margin: 30px auto;
-    padding: 25px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    animation: fadeIn 0.2s ease-in-out;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #333;
+}
+
+/* Header */
+.detail-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
 }
 
 .title {
-    text-align: center;
-    font-size: 26px;
-    font-weight: 700;
-    margin-bottom: 30px;
+    margin: 0;
+    font-size: 1.8rem;
+    color: #2c3e50;
 }
 
+.app-id-pill {
+    background-color: #e2e8f0;
+    color: #64748b;
+    padding: 4px 10px;
+    margin-left: 20px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Card Style (Tươi sáng) */
 .detail-card {
-    background: #f8f9ff;
-    padding: 20px;
-    margin-bottom: 22px;
-    border-radius: 10px;
-    border: 1px solid #e3e6ff;
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    /* Đổ bóng nhẹ */
+    border: 1px solid #f1f5f9;
 }
 
 .detail-card h3 {
-    margin-bottom: 12px;
-    font-size: 20px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    color: #4e73df;
+    /* Màu xanh chủ đạo */
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 10px;
 }
 
-.detail-card pre {
-    background: #111;
-    color: #0f0;
-    padding: 12px;
+/* Grid hiển thị thông tin */
+.info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+}
+
+.label {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.value {
+    color: #1e293b;
+    font-weight: 600;
+    text-align: right;
+}
+
+/* Style đặc biệt cho các giá trị */
+.value.bold {
+    font-size: 1.05rem;
+    color: #0f172a;
+}
+
+.value.money {
+    color: #d35400;
+    font-size: 1.1rem;
+}
+
+.value.highlight {
+    color: #2563eb;
+}
+
+.value.tag {
+    background: #f1f5f9;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+/* Status Badge */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.SUBMITTED {
+    background: #fff7ed;
+    color: #c2410c;
+    border: 1px solid #ffedd5;
+}
+
+.status-badge.APPROVED {
+    background: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #dcfce7;
+}
+
+.status-badge.REJECTED {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fee2e2;
+}
+
+/* Actions Footer */
+.detail-actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+.btn-secondary {
+    padding: 12px 24px;
+    border: 1px solid #cbd5e1;
+    background: white;
+    color: #475569;
     border-radius: 8px;
-    font-size: 14px;
-    overflow-x: auto;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.btn-secondary:hover {
+    background: #f8fafc;
 }
 
-/* ===== GRID HIỂN THỊ JSON ĐẸP ===== */
-.json-info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    gap: 14px;
-    margin-top: 10px;
+.btn-primary {
+    padding: 12px 24px;
+    border: none;
+    background: linear-gradient(135deg, #4e73df, #224abe);
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(78, 115, 223, 0.3);
+    transition: all 0.2s;
 }
 
-.json-info-card {
-    background: linear-gradient(180deg, #f5f7fa, #eef3ff);
-    border: 1px solid #d9e4ff;
-    border-radius: 10px;
-    padding: 12px 14px;
-    transition: 0.2s ease;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-}
-
-.json-info-card:hover {
+.btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.json-label {
-    font-size: 14px;
-    font-weight: 600;
-    color: #2f4ea8;
-    margin-bottom: 4px;
-    text-transform: capitalize;
-}
-
-.json-value {
-    font-weight: 600;
-    color: #222;
-    font-size: 15px;
+/* Loading */
+.loading-state {
+    text-align: center;
+    padding: 50px;
+    color: #94a3b8;
+    font-style: italic;
 }

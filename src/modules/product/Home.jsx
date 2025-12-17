@@ -13,8 +13,14 @@ export default function Home() {
     }, []);
 
     const loadCategories = async () => {
-        const res = await categoryApi.getAll();
-        setCategories(res.data.data.items);
+        try {
+            // 2. Gọi hàm mới getActive() thay vì gọi api.get thủ công
+            const res = await categoryApi.getActive();
+
+            setCategories(res.data.data.items || []);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (

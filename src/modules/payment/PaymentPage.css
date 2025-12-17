@@ -1,0 +1,239 @@
+/* --- 1. Layout & Nền --- */
+.pay-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #eef2f3 0%, #eff6fd 100%);
+    /* Nền xám xanh sang trọng */
+    padding: 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* --- 2. Thẻ Card (Hóa đơn) --- */
+.pay-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 480px;
+    padding: 40px;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(0, 0, 0, 0.02);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: paySlideUp 0.5s ease-out;
+}
+
+@keyframes paySlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- 3. Header --- */
+.pay-icon-wrapper {
+    width: 70px;
+    height: 70px;
+    background-color: #eff6ff;
+    color: #3b82f6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.pay-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0 0 5px;
+}
+
+.pay-subtitle {
+    color: #64748b;
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+}
+
+/* --- 4. Khung Thông Tin (Invoice Box) --- */
+.pay-invoice-box {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+/* Từng dòng */
+.pay-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed #cbd5e1;
+    /* Nét đứt hóa đơn */
+    font-size: 0.95rem;
+}
+
+.pay-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.pay-label {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.pay-value {
+    color: #334155;
+    font-weight: 600;
+    text-align: right;
+}
+
+/* Badge trạng thái */
+.pay-status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+.pay-status.submitted {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+
+/* Tổng tiền (Highlight) */
+.pay-row.total {
+    margin-top: 10px;
+    padding-top: 15px;
+    border-top: 2px solid #e2e8f0;
+    border-bottom: none;
+}
+
+.pay-row.total .pay-label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.pay-row.total .pay-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #2563eb;
+    /* Màu xanh nổi bật */
+}
+
+/* --- 5. Thông báo (Alerts) --- */
+.pay-alert {
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    text-align: left;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.pay-alert.warning {
+    background-color: #fffbeb;
+    color: #b45309;
+    border: 1px solid #fcd34d;
+}
+
+.pay-alert.error {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+/* --- 6. Nút Bấm (Actions) --- */
+.pay-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.pay-btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.pay-btn-back {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+.pay-btn-back:hover {
+    background-color: #e2e8f0;
+}
+
+.pay-btn-submit {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    flex: 1.5;
+    /* Nút này to hơn */
+}
+
+.pay-btn-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+.pay-btn-submit:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* --- 7. Footer Note --- */
+.pay-footer {
+    margin-top: 25px;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .pay-card {
+        padding: 25px;
+    }
+
+    .pay-actions {
+        flex-direction: column-reverse;
+    }
+
+    .pay-btn {
+        width: 100%;
+    }
+}

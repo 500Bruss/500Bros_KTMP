@@ -1,8 +1,146 @@
-.container {
-    padding-top: 10px;
+/* OrderHistory.css - Đã đổi tên class để tránh trùng lặp */
+
+/* 1. KHUNG BAO CHÍNH (Đổi từ .container -> .policy-history-container) */
+.policy-history-container {
+    max-width: 85%;
+    margin: 30px auto;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #333;
 }
 
+/* Tiêu đề */
+.policy-history-container h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #c2e0c9;
 
-.container1 {
+    /* Gradient text */
+    background: linear-gradient(90deg, #2563eb, #1d4ed8);
+    /* Sửa lại màu cho rõ hơn */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+/* 2. KHUNG BẢNG */
+.policy-table-wrapper {
+    /* Đổi tên cho rõ ràng */
+    overflow-x: auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
+}
+
+.policy-list-table {
+    /* Đổi tên class bảng */
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1000px;
+}
+
+/* 3. HEADER BẢNG */
+.policy-list-table thead {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    /* Xanh dương chuẩn đẹp */
+    color: white;
+}
+
+.policy-list-table th {
+    padding: 20px;
+    text-align: left;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
     border: none;
+}
+
+/* 4. NỘI DUNG BẢNG */
+.policy-list-table td {
+    padding: 20px;
+    vertical-align: middle;
+    font-size: 0.95rem;
+    color: #4b5563;
+    border-bottom: 1px solid #f3f4f6;
+    white-space: nowrap;
+}
+
+/* Zebra Striping */
+.policy-list-table tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+/* Hover Effect */
+.policy-list-table tbody tr:hover {
+    background-color: #eff6ff;
+    transition: background-color 0.2s ease;
+}
+
+/* Cột Số Hợp đồng */
+.policy-list-table td:first-child {
+    font-weight: 600;
+    color: #2563eb;
+}
+
+/* Cột Tiền */
+.policy-list-table td:nth-child(5) {
+    font-weight: 700;
+    color: #d97706;
+}
+
+/* 5. NÚT BẤM (Scoped styles) */
+.policy-list-table button {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(59, 130, 246, 0.3);
+    transition: all 0.2s ease-in-out;
+}
+
+.policy-list-table button:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+}
+
+/* 6. PHÂN TRANG */
+.policy-paging {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.policy-paging button {
+    padding: 8px 14px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    color: #6b7280;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 40px;
+}
+
+.policy-paging button:hover:not(:disabled) {
+    background-color: #eff6ff;
+    color: #2563eb;
+    border-color: #bfdbfe;
+}
+
+.policy-paging button:disabled {
+    background-color: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+    border-color: #f3f4f6;
 }

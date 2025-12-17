@@ -1,0 +1,234 @@
+/* --- 1. CONTAINER CHÍNH --- */
+.payment-result-container {
+    min-height: 100vh;
+    /* Chiếm toàn màn hình */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Nền gradient nhẹ tạo cảm giác hiện đại */
+    background: linear-gradient(135deg, #f5f7fa 0%, #f2f7ff 100%);
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- 2. THẺ CARD HÓA ĐƠN --- */
+.payment-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 600px;
+    /* Tăng độ rộng lên 600px cho thoáng */
+    padding: 50px 40px;
+    /* Tăng padding để nội dung không bị bí */
+    border-radius: 24px;
+    /* Bo góc tròn trịa hơn */
+    text-align: center;
+
+    /* Hiệu ứng đổ bóng sâu, tạo cảm giác nổi hẳn lên nền */
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(0, 0, 0, 0.02);
+
+    position: relative;
+    overflow: hidden;
+    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Viền màu trên cùng để phân biệt trạng thái */
+.payment-card.success {
+    border-top: 8px solid #27ae60;
+}
+
+.payment-card.failed {
+    border-top: 8px solid #e74c3c;
+}
+
+/* --- 3. ICON TRẠNG THÁI --- */
+.status-icon {
+    margin-bottom: 25px;
+    /* Hiệu ứng nảy nhẹ khi hiện ra */
+    animation: popIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* --- 4. TYPOGRAPHY (CHỮ) --- */
+.result-title {
+    font-size: 2rem;
+    /* Chữ tiêu đề to hẳn lên */
+    font-weight: 800;
+    margin-bottom: 15px;
+    color: #2d3748;
+    letter-spacing: -0.5px;
+}
+
+.result-message {
+    color: #718096;
+    font-size: 1.1rem;
+    /* Chữ mô tả dễ đọc hơn */
+    margin-bottom: 40px;
+    line-height: 1.6;
+    padding: 0 20px;
+}
+
+/* --- 5. HỘP CHI TIẾT GIAO DỊCH (Receipt Box) --- */
+.invoice-box {
+    background-color: #f8fafc;
+    padding: 30px;
+    /* Tăng khoảng cách bên trong */
+    border-radius: 16px;
+    text-align: left;
+    margin-bottom: 40px;
+    border: 2px dashed #cbd5e0;
+    /* Viền nét đứt dày hơn */
+}
+
+.invoice-title {
+    margin: 0 0 20px 0;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 15px;
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    /* Tiêu đề mục to hơn */
+    font-weight: 700;
+    color: #4a5568;
+}
+
+/* Các dòng chi tiết */
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    /* Giãn cách các dòng */
+    font-size: 1.05rem;
+    /* Chữ thông tin to hơn */
+    color: #4a5568;
+}
+
+.detail-row:last-child {
+    margin-bottom: 0;
+}
+
+.detail-row span:first-child {
+    color: #718096;
+    font-weight: 500;
+}
+
+.detail-row .value {
+    font-weight: 700;
+    color: #2d3748;
+    text-align: right;
+    word-break: break-all;
+}
+
+/* Riêng số tiền thì làm cực to và nổi bật */
+.detail-row .value.amount {
+    font-size: 1.8rem;
+    color: #27ae60;
+    /* Màu xanh tiền tệ */
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+/* --- 6. NÚT BẤM (Buttons) --- */
+.action-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.btn-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 32px;
+    /* Nút to, dễ bấm */
+    border: none;
+    border-radius: 50px;
+    /* Bo tròn kiểu viên thuốc */
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    /* Hai nút bằng nhau */
+    max-width: 200px;
+}
+
+/* Nút Trang chủ */
+.btn-home {
+    background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+    color: white;
+    box-shadow: 0 10px 20px rgba(78, 115, 223, 0.3);
+}
+
+.btn-home:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(78, 115, 223, 0.4);
+}
+
+/* Nút Lịch sử */
+.btn-history {
+    background-color: #96cbff;
+    color: #c1ff9d;
+}
+
+.btn-history:hover {
+    background-color: #e2e8f0;
+    color: #2d3748;
+    transform: translateY(-3px);
+}
+
+/* --- ANIMATIONS --- */
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    80% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 600px) {
+    .payment-card {
+        padding: 30px 20px;
+        margin: 10px;
+    }
+
+    .result-title {
+        font-size: 1.6rem;
+    }
+
+    .detail-row .value.amount {
+        font-size: 1.4rem;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .btn-action {
+        width: 100%;
+        max-width: none;
+    }
+}

@@ -1,0 +1,328 @@
+/* AdminClaims.css */
+
+/* --- 1. CÀI ĐẶT MÀU SẮC & THEME --- */
+:root {
+    --primary: #4e73df;
+    /* Màu xanh chủ đạo Admin */
+    --text-dark: #5a5c69;
+    /* Màu chữ đậm */
+    --text-gray: #858796;
+    /* Màu chữ nhạt */
+    --bg-card: #ffffff;
+    /* Nền card trắng */
+    --border-color: #e3e6f0;
+    /* Viền nhạt */
+    --shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    /* Đổ bóng card */
+}
+
+/* --- 2. HEADER --- */
+.claims-header {
+    margin-bottom: 1.5rem;
+}
+
+.claims-header h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+/* --- 3. KHUNG CARD (Bộ lọc & Bảng) --- */
+/* Biến cái div trơn thành Card xịn như hình */
+.claims-filter-card,
+.claims-table-card {
+    background-color: var(--bg-card);
+    background-clip: border-box;
+    border: 1px solid var(--border-color);
+    border-radius: 0.35rem;
+    /* Bo góc nhẹ */
+    box-shadow: var(--shadow);
+    /* Đổ bóng nổi */
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+}
+
+/* Riêng card bảng thì bỏ padding để bảng tràn viền */
+.claims-table-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+/* --- 4. BỘ LỌC (FILTER SECTION) --- */
+.filter-title {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.filter-grid {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Style cho Input & Select giống hình */
+.filter-input,
+.filter-select {
+    flex: 1;
+    /* Tự co giãn đều nhau */
+    min-width: 200px;
+    display: block;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #6e707e;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #d1d3e2;
+    border-radius: 0.35rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    outline: none;
+}
+
+/* Hiệu ứng focus (khi bấm vào) */
+.filter-input:focus,
+.filter-select:focus {
+    color: #6e707e;
+    background-color: #fff;
+    border-color: #bac8f3;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+/* --- 5. BẢNG DỮ LIỆU (TABLE STYLE) --- */
+.claims-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0;
+}
+
+/* Hàng tiêu đề bảng (Header) */
+.claims-table thead {
+    background-color: #f8f9fc;
+    /* Màu nền xám nhạt */
+    border-bottom: 2px solid var(--border-color);
+}
+
+.claims-table th {
+    padding: 1rem;
+    text-align: left;
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text-dark);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+/* Hàng dữ liệu */
+.claims-table tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s;
+}
+
+.claims-table tbody tr:hover {
+    background-color: #fdfdfe;
+    /* Hover sáng lên chút */
+}
+
+.claims-table td {
+    padding: 1rem;
+    vertical-align: middle;
+    color: #5a5c69;
+    font-size: 0.95rem;
+}
+
+/* Dòng thông báo khi không có dữ liệu */
+.empty-row {
+    text-align: center;
+    padding: 3rem !important;
+    font-style: italic;
+    color: var(--text-gray);
+}
+
+/* --- 6. BADGE TRẠNG THÁI (Hình viên thuốc) --- */
+/* Class chung .badge */
+.badge {
+    display: inline-block;
+    padding: 0.35em 0.8em;
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 10rem;
+    /* Bo tròn tuyệt đối */
+    letter-spacing: 0.5px;
+}
+
+/* Màu sắc giống hình mẫu */
+.badge-SUBMITTED {
+    color: #856404;
+    background-color: #fff3cd;
+    /* Vàng nhạt */
+    border: 1px solid #ffeeba;
+}
+
+.badge-APPROVED {
+    color: #155724;
+    background-color: #d4edda;
+    /* Xanh lá nhạt */
+    border: 1px solid #c3e6cb;
+}
+
+/* Màu đỏ giống chữ EXPIRED trong hình */
+.badge-REJECTED {
+    color: #721c24;
+    background-color: #f8d7da;
+    /* Đỏ nhạt */
+    border: 1px solid #f5c6cb;
+}
+
+.badge-PAID {
+    color: #004085;
+    background-color: #cce5ff;
+    /* Xanh dương nhạt */
+    border: 1px solid #b8daff;
+}
+
+/* --- 7. SELECT CẬP NHẬT (ACTION) --- */
+.action-select {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-dark);
+    background-color: #fff;
+    border: 1px solid #d1d3e2;
+    border-radius: 0.35rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-select:hover {
+    background-color: #eaecf4;
+}
+
+/* 6. Badge Style (Viên thuốc) */
+.badge {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 50px;
+    /* Bo tròn hoàn toàn */
+    text-align: center;
+    min-width: 90px;
+}
+
+.badge-SUBMITTED {
+    color: #856404;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+}
+
+.badge-APPROVED {
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+}
+
+.badge-REJECTED {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+.badge-PAID {
+    color: #004085;
+    background-color: #cce5ff;
+    border: 1px solid #b8daff;
+}
+
+/* ... Giữ nguyên các phần CSS cũ (root, card, table, badge...) ... */
+
+/* --- ACTION BUTTONS (MỚI) --- */
+.btn-action {
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: none;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: white;
+    text-transform: uppercase;
+    min-width: 70px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+/* Nút Duyệt (Xanh lá) */
+.btn-approve {
+    background-color: #1cc88a;
+    width: 100%;
+    height: 40px;
+    border-radius: 20px;
+}
+
+/* Nút Hủy (Đỏ) */
+.btn-reject {
+    background-color: #e74a3b;
+    width: 100%;
+    height: 40px;
+    border-radius: 20px;
+}
+
+/* Nút Chi trả (Xanh dương) */
+.btn-pay {
+    background-color: #4ad9ef;
+    width: 100%;
+    height: 30px;
+    border-radius: 20px;
+    /* Nút chi trả cho dài ra chút cho đẹp */
+}
+
+/* ... Các CSS cũ giữ nguyên ... */
+
+/* [MỚI] Nút Reset */
+.btn-reset {
+    background-color: #f8f9fc;
+    border: 1px solid #d1d3e2;
+    color: #6e707e;
+    width: 40px;
+    /* Hình vuông nhỏ */
+    height: 40px;
+    border-radius: 50%;
+    /* Bo tròn */
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    /* Không bị co lại */
+}
+
+.btn-reset:hover {
+    background-color: #eaecf4;
+    color: #4e73df;
+    /* Xanh khi hover */
+    transform: rotate(90deg);
+    /* Hiệu ứng xoay nhẹ */
+    border-color: #4e73df;
+}
+
+/* ... Các class cũ khác giữ nguyên ... */

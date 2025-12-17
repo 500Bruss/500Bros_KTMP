@@ -14,16 +14,30 @@ export default function AdminPolicies() {
     dateTo: "",
   });
 
-  const load = async () => {
-    const res = await api.get("/api/policies", {
-      params: { all: true, sort: "createdAt,desc" },
+  // [MỚI] Hàm reset bộ lọc
+  const handleResetFilters = () => {
+    setFilters({
+      status: "ALL",
+      search: "",
+      dateFrom: "",
+      dateTo: "",
     });
-    const items = res.data.data.items || [];
-    const mapped = items.map((p) => ({
-      ...p,
-      status: p.status || "ACTIVE",
-    }));
-    setItems(mapped);
+  };
+
+  const load = async () => {
+    try {
+      const res = await api.get("/api/policies", {
+        params: { all: true, sort: "createdAt,desc" },
+      });
+      const items = res.data.data.items || [];
+      const mapped = items.map((p) => ({
+        ...p,
+        status: p.status || "ACTIVE",
+      }));
+      setItems(mapped);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -50,7 +64,9 @@ export default function AdminPolicies() {
   });
 
   const updateStatus = async (id, status) => {
+    if (!window.confirm(`Xác nhận đổi trạng thái sang ${status}?`)) return;
     try {
+      // Lưu ý: Đảm bảo backend có endpoint PUT này
       await api.put(`/api/policies/${id}/status/${status}`);
       await load();
     } catch (err) {
@@ -58,6 +74,10 @@ export default function AdminPolicies() {
       alert("Cập nhật trạng thái thất bại");
     }
   };
+
+  // Helper format
+  const formatMoney = (v) => v ? Number(v).toLocaleString('vi-VN') + ' đ' : '0 đ';
+  const formatDate = (d) => d ? new Date(d).toLocaleDateString('vi-VN') : '-';
 
   return (
     <AdminLayout title="Hợp đồng">
@@ -69,10 +89,11 @@ export default function AdminPolicies() {
           </div>
 
           <div className="filter-bar">
-            <div className="filter-item">
+            <div className="filter-item wide-search">
               <label>Tìm kiếm</label>
               <input
-                placeholder="Policy/user/sản phẩm"
+                className="filter-input"
+                placeholder="Policy No, User, Sản phẩm..."
                 value={filters.search}
                 onChange={(e) =>
                   setFilters({ ...filters, search: e.target.value })
@@ -83,6 +104,7 @@ export default function AdminPolicies() {
             <div className="filter-item">
               <label>Trạng thái</label>
               <select
+                className="filter-select"
                 value={filters.status}
                 onChange={(e) =>
                   setFilters({ ...filters, status: e.target.value })
@@ -100,6 +122,7 @@ export default function AdminPolicies() {
               <label>Từ ngày</label>
               <input
                 type="date"
+                className="filter-input"
                 value={filters.dateFrom}
                 onChange={(e) =>
                   setFilters({ ...filters, dateFrom: e.target.value })
@@ -111,37 +134,59 @@ export default function AdminPolicies() {
               <label>Đến ngày</label>
               <input
                 type="date"
+                className="filter-input"
                 value={filters.dateTo}
                 onChange={(e) =>
                   setFilters({ ...filters, dateTo: e.target.value })
                 }
               />
             </div>
+
+            {/* [MỚI] Nút Reset */}
+            <div className="filter-item reset-box">
+              <label>&nbsp;</label>
+              <button
+                className="reset-btn"
+                onClick={handleResetFilters}
+                title="Xóa bộ lọc"
+              >
+                ↺
+              </button>
+            </div>
           </div>
         </div>
 
-        <div className="admin-card">
+        <div className="admin-card table-card">
           <table className="data-table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Policy No</th>
-                <th>User</th>
-                <th>Product</th>
-                <th>Premium</th>
+                <th>Mã HĐ</th>
+                <th>Số Policy</th>
+                <th>Khách hàng</th>
+                <th>Sản phẩm</th>
+                <th>Phí BH</th>
                 <th>Trạng thái</th>
-                <th>Hiệu lực</th>
-                <th>Hành động</th>
+                <th>Thời hạn</th>
+                <th>Cập nhật</th>
               </tr>
             </thead>
             <tbody>
+              {filtered.length === 0 && (
+                <tr>
+                  <td colSpan="8" style={{ textAlign: "center", padding: 20, color: '#888' }}>
+                    Không tìm thấy hợp đồng nào
+                  </td>
+                </tr>
+              )}
+
               {filtered.map((p) => (
                 <tr key={p.id}>
                   <td>{p.id}</td>
-                  <td>{p.policyNumber}</td>
-                  <td>{p.userName}</td>
-                  <td>{p.productName}</td>
-                  <td>{p.premiumTotal?.toLocaleString()}</td>
+                  <td style={{ fontWeight: 'bold', color: '#2980b9' }}>{p.policyNumber}</td>
+                  <td>{p.userName || p.userId}</td>
+                  <td>{p.productName || p.productId}</td>
+                  <td style={{ fontWeight: 'bold', color: '#d35400' }}>{formatMoney(p.premiumTotal)}</td>
+
                   <td>
                     <span
                       className={`status-chip ${p.status === "ACTIVE"
@@ -154,13 +199,20 @@ export default function AdminPolicies() {
                       {p.status}
                     </span>
                   </td>
-                  <td>
+
+                  <td style={{ fontSize: '0.85rem', color: '#555' }}>
                     {p.startDate} → {p.endDate}
                   </td>
+
                   <td>
                     <select
+                      className="action-select" // Class style đẹp
                       value={p.status}
                       onChange={(e) => updateStatus(p.id, e.target.value)}
+                      style={{
+                        borderColor: p.status === 'ACTIVE' ? '#27ae60' :
+                          p.status === 'EXPIRED' ? '#e74a3b' : '#f39c12'
+                      }}
                     >
                       {STATUSES.filter((s) => s !== "ALL").map((s) => (
                         <option key={s} value={s}>
@@ -171,13 +223,6 @@ export default function AdminPolicies() {
                   </td>
                 </tr>
               ))}
-              {filtered.length === 0 && (
-                <tr>
-                  <td colSpan="8" style={{ textAlign: "center", padding: 16 }}>
-                    Không có dữ liệu
-                  </td>
-                </tr>
-              )}
             </tbody>
           </table>
         </div>
