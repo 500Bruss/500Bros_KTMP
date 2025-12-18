@@ -87,6 +87,7 @@ export default function ProductDetail() {
   };
 
   /* ============ CHUYỂN SANG /quote ============ */
+  /* ============ CHUYỂN SANG /ApplicationForm (NHẬP THÔNG TIN) ============ */
   const handleContinueQuote = () => {
     const payload = {
       productId: product.id,
@@ -94,8 +95,9 @@ export default function ProductDetail() {
     };
 
     localStorage.setItem("quoteData", JSON.stringify(payload));
-    navigate("/quote");
+    navigate("/ApplicationForm"); // ✅ đổi từ /quote -> /ApplicationForm
   };
+
 
   /* ============ TÍNH GIÁ TỔNG ============ */
   const totalPrice =

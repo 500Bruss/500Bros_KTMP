@@ -1,75 +1,151 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { quoteApi } from "../../api/quote.api";
-import "./Quote.css";
 import { useAuth } from "../auth/hook/useAuth";
+import { applicationApi } from "../../api/application.api";
+import "./Quote.css";
+
+const safeJsonParse = (raw) => {
+  if (!raw) return null;
+  if (typeof raw === "object") return raw;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+};
 
 export default function Quote() {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+
   const [quote, setQuote] = useState(null);
-  const createdRef = useRef(false);
+
+  // message box giống ApplicationForm
+  const [message, setMessage] = useState({ text: "", type: "" });
+  const [loadingApp, setLoadingApp] = useState(false);
 
   useEffect(() => {
-    if (createdRef.current) return;
-    createdRef.current = true;
-
+    // 1) Check login
     if (!currentUser) {
       navigate("/login");
       return;
     }
 
-    const raw = localStorage.getItem("quoteData");
+    // 2) Load createdQuote (đã tạo ở ApplicationForm)
+    const raw = localStorage.getItem("createdQuote");
     if (!raw) {
-      navigate("/");
+      // chưa tạo quote => quay lại form nhập
+      navigate("/ApplicationForm");
       return;
     }
 
-    const data = JSON.parse(raw);
+    try {
+      const q = JSON.parse(raw);
 
-    if (!data.productId) {
-      navigate("/");
-      return;
+      // ép string cho chắc giống bản cũ bạn làm
+      const safeQuote = {
+        ...q,
+        id: q.id?.toString(),
+        productId: q.productId?.toString(),
+        userId: q.userId?.toString(),
+      };
+
+      setQuote(safeQuote);
+    } catch (err) {
+      console.error("Parse createdQuote error:", err);
+      navigate("/ApplicationForm");
     }
-
-    const inputObject = {
-      age: data.age || 30,
-      gender: data.gender || "male",
-    };
-
-    const payload = {
-      productId: data.productId,
-      selectedAddons: data.selectedAddons || [],
-      inputData: JSON.stringify(inputObject),
-    };
-
-    quoteApi
-      .create(payload)
-      .then((res) => {
-        const q = res.data.data;
-
-        const safeQuote = {
-          ...q,
-          id: q.id?.toString(),
-          productId: q.productId?.toString(),
-          userId: q.userId?.toString(),
-        };
-
-        localStorage.setItem("createdQuote", JSON.stringify(safeQuote));
-        setQuote(safeQuote);
-      })
-      .catch((err) => {
-        console.error("ERROR:", err);
-        alert("Tạo báo giá thất bại. Vui lòng thử lại.");
-        navigate("/");
-      });
   }, [currentUser, navigate]);
 
-  if (!quote) return <p>Đang tạo báo giá...</p>;
+  const handleCreateApplication = async () => {
+    if (!quote?.id) return;
+
+    setMessage({ text: "", type: "" });
+
+    // lấy dữ liệu nhập từ ApplicationForm (form nhập trước Quote)
+    const applicantRaw = localStorage.getItem("draftApplicantData");
+    const insuredRaw = localStorage.getItem("draftInsuredData");
+
+    if (!applicantRaw || !insuredRaw) {
+      setMessage({
+        text: "Thiếu dữ liệu form. Vui lòng quay lại nhập lại thông tin.",
+        type: "error",
+      });
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    const applicantData = safeJsonParse(applicantRaw);
+    const insuredData = safeJsonParse(insuredRaw);
+
+    // validation giống file ApplicationForm bạn gửi
+    if (parseInt(applicantData?.age || "0") < 18) {
+      setMessage({ text: "Người yêu cầu phải từ 18 tuổi trở lên!", type: "error" });
+      window.scrollTo(0, 0);
+      return;
+    }
+    if (parseInt(insuredData?.age || "0") < 1) {
+      setMessage({ text: "Người được bảo hiểm phải từ 1 tuổi trở lên!", type: "error" });
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    try {
+      setLoadingApp(true);
+
+      const body = { applicantData, insuredData };
+
+      const res = await applicationApi.create(quote.id, body);
+      const app = res.data?.data ?? res.data;
+
+      localStorage.setItem("createdApplication", JSON.stringify(app));
+
+      setMessage({ text: "Tạo hồ sơ thành công!", type: "success" });
+      window.scrollTo(0, 0);
+
+      // giữ y như bạn làm cho selenium
+      setTimeout(() => {
+        navigate(`/application/${app.id}`);
+
+      }, 1500);
+    } catch (err) {
+      const msg =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Không thể tạo hồ sơ. Vui lòng thử lại.";
+      setMessage({ text: msg, type: "error" });
+      window.scrollTo(0, 0);
+    } finally {
+      setLoadingApp(false);
+    }
+  };
+
+  if (!quote) return <p>Đang tải báo giá...</p>;
+
+  const inputDataObj = safeJsonParse(quote.inputData) || {};
 
   return (
     <div className="quote-container">
       <h2 className="quote-title">Báo giá bảo hiểm</h2>
+
+      {/* message box */}
+      {message.text && (
+        <div
+          className="msg-box"
+          style={{
+            padding: "15px",
+            marginBottom: "20px",
+            borderRadius: "8px",
+            color: "#fff",
+            backgroundColor: message.type === "success" ? "#27ae60" : "#e74c3c",
+            textAlign: "center",
+            fontWeight: "bold",
+            boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+          }}
+        >
+          {message.text}
+        </div>
+      )}
 
       {/* ===== THÔNG TIN QUOTE ===== */}
       <div className="quote-card">
@@ -99,9 +175,7 @@ export default function Quote() {
               </tr>
               <tr>
                 <td>Trạng thái</td>
-                <td className={`status-badge ${quote.status}`}>
-                  {quote.status}
-                </td>
+                <td className={`status-badge ${quote.status}`}>{quote.status}</td>
               </tr>
               <tr>
                 <td>Hiệu lực đến</td>
@@ -112,46 +186,42 @@ export default function Quote() {
         </div>
       </div>
 
-      {/* ===== DANH SÁCH ADDON ĐÃ CHỌN ===== */}
       {/* ===== QUYỀN LỢI BỔ SUNG ĐÃ CHỌN ===== */}
       {quote.selectedAddons && quote.selectedAddons.length > 0 && (
         <div className="quote-card">
           <h3>Quyền lợi bổ sung đã chọn</h3>
 
-          {quote.selectedAddons.map((a) => (
-            <div key={a.id} className="json-box" style={{ marginBottom: 12 }}>
-
-              {/* NAME + PRICE */}
-              <div className="json-row">
-                <span className="json-key">Tên:</span>
-                <span className="json-value">{a.name}</span>
-              </div>
-
-              <div className="json-row">
-                <span className="json-key">Giá:</span>
-                <span className="json-value">
-                  {a.price?.toLocaleString()} VND
-                </span>
-              </div>
-
-              {/* DESCRIPTION */}
-              {a.description && (
+          {quote.selectedAddons.map((a) => {
+            const metaObj = safeJsonParse(a.metaData);
+            return (
+              <div key={a.id} className="json-box" style={{ marginBottom: 12 }}>
                 <div className="json-row">
-                  <span className="json-key">Mô tả:</span>
-                  <span className="json-value">{a.description}</span>
+                  <span className="json-key">Tên:</span>
+                  <span className="json-value">{a.name}</span>
                 </div>
-              )}
 
-              {/* METADATA: DẠNG JSON-ROW NHƯ THÔNG TIN TÍNH PHÍ */}
-              {a.metaData &&
-                Object.entries(JSON.parse(a.metaData)).map(([k, v]) => (
-                  <div key={k} className="json-row">
-                    <span className="json-key">{k}:</span>
-                    <span className="json-value">{String(v)}</span>
+                <div className="json-row">
+                  <span className="json-key">Giá:</span>
+                  <span className="json-value">{a.price?.toLocaleString()} VND</span>
+                </div>
+
+                {a.description && (
+                  <div className="json-row">
+                    <span className="json-key">Mô tả:</span>
+                    <span className="json-value">{a.description}</span>
                   </div>
-                ))}
-            </div>
-          ))}
+                )}
+
+                {metaObj &&
+                  Object.entries(metaObj).map(([k, v]) => (
+                    <div key={k} className="json-row">
+                      <span className="json-key">{k}:</span>
+                      <span className="json-value">{String(v)}</span>
+                    </div>
+                  ))}
+              </div>
+            );
+          })}
         </div>
       )}
 
@@ -160,7 +230,7 @@ export default function Quote() {
         <h3>Thông tin tính phí</h3>
 
         <div className="json-box">
-          {Object.entries(JSON.parse(quote.inputData)).map(([key, val]) => (
+          {Object.entries(inputDataObj).map(([key, val]) => (
             <div key={key} className="json-row">
               <span className="json-key">{key}:</span>
               <span className="json-value">{String(val)}</span>
@@ -169,11 +239,8 @@ export default function Quote() {
         </div>
       </div>
 
-      <button
-        className="confirm-btn"
-        onClick={() => navigate("/ApplicationForm")}
-      >
-        Tiếp tục tạo hồ sơ
+      <button className="confirm-btn" onClick={handleCreateApplication} disabled={loadingApp}>
+        {loadingApp ? "Đang tạo hồ sơ..." : "Tiếp tục tạo hồ sơ"}
       </button>
     </div>
   );
