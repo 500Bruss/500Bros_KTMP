@@ -282,9 +282,6 @@ export default function AdminProducts() {
                 </div>
 
                 <hr className="divider" />
-
-                {/* 3. METADATA STYLE "CARD" (DẠNG SELECTION) */}
-                {/* 3. METADATA (STYLE CHUẨN - DỌC - KHÔNG NỀN MÀU) */}
                 <h4 className="section-title">Thông tin bổ sung</h4>
 
                 {/* Container viền nhẹ để gom nhóm */}
